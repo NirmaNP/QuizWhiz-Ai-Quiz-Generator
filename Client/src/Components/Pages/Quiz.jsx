@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from 'axios';
+import './Quiz.css';
 
 function Quiz() {
+
+  const URL = import.meta.env.VITE_API_URL;
+
   const [config, setConfig] = useState({
     topic: "",
     difficulty: "easy",
@@ -22,8 +26,13 @@ function Quiz() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [actualTimeTaken, setActualTimeTaken] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [quizResults, setQuizResults] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const nextButtonRef = useRef(null);
+  
+  const progress = (currentQuestionIndex / questions.length) * 100;
 
-  // Load saved configuration on component mount
   useEffect(() => {
     const savedTopic = localStorage.getItem("selectedTopic");
     const savedDifficulty = localStorage.getItem("selectedDifficulty");
@@ -39,7 +48,6 @@ function Quiz() {
     }
   }, []);
 
-  // Configuration change handlers
   const handleTopicChange = (e) => {
     const newTopic = e.target.value;
     setConfig((prevConfig) => ({ ...prevConfig, topic: newTopic }));
@@ -58,9 +66,9 @@ function Quiz() {
     localStorage.setItem("numQuestions", newNumQuestions.toString());
   };
 
-  // AI Question Generation
   const handleCompletion = async () => {
     setError(null);
+    setIsLoading(true);
 
     try {
       const apiKey = "AIzaSyAjGFif217NTM9i3-QFAVyl5FNdMo4Rx0k"; 
@@ -98,10 +106,7 @@ function Quiz() {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
-
       let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
-      // Remove any unexpected formatting
       rawText = rawText.replace(/```json|```/g, "").trim();
 
       let aiQuestions = [];
@@ -116,38 +121,34 @@ function Quiz() {
         throw new Error("Empty or invalid AI-generated questions");
       }
 
-      // Store questions in state and localStorage
       setQuestions(aiQuestions);
       localStorage.setItem("quizQuestions", JSON.stringify(aiQuestions));
-
+      setIsLoading(false);
       return aiQuestions;
 
     } catch (err) {
       console.error("Error in handleCompletion:", err.message);
       setError(err.message);
+      setIsLoading(false);
       return null;
     }
   };
 
-  // Configuration Submit Handler
   const handleConfigSubmit = async () => {
+    setError(null);
+    setIsLoading(true);
+    
     let parsedQuestions = [];
     const storedQuestions = localStorage.getItem("quizQuestions");
 
     try {
-      // First try to get AI-generated questions
       const aiQuestions = await handleCompletion();
       
       if (aiQuestions && aiQuestions.length > 0) {
         parsedQuestions = aiQuestions;
-        console.log("Generated from AI");
       } else if (storedQuestions) {
-        // Fallback to stored questions
         parsedQuestions = JSON.parse(storedQuestions);
-        console.log("Using stored questions");
       } else {
-        // Fallback to mock questions
-        console.log("Using mock questions");
         parsedQuestions = Array.from({ length: config.numQuestions }, (_, i) => ({
           id: i + 1,
           text: `Question ${i + 1}: What is the answer?`,
@@ -155,75 +156,25 @@ function Quiz() {
           correctAnswer: "Option 1",
         }));
       }
+
+      setQuestions(parsedQuestions);
+      setShowConfigModal(false);
+      setQuizStarted(true);
+      setTimer(config.timerDuration);
+      setTotalTime(config.timerType === "individual" ? config.timerDuration * config.numQuestions : config.timerDuration * 60);
+      setStartTime(new Date());
+      setUserAnswers([]);
+      setCurrentQuestionIndex(0);
+      setQuizFinished(false);
     } catch (error) {
       console.error("Error parsing questions:", error);
-      parsedQuestions = [];
-    }
-
-    setQuestions(parsedQuestions);
-    setShowConfigModal(false);
-    setQuizStarted(true);
-    setTimer(config.timerDuration);
-    setTotalTime(config.timerType === "individual" ? config.timerDuration * config.numQuestions : config.timerDuration * 60);
-    setStartTime(new Date());
-  };
-
-  // Answer Selection Handler
-  const handleAnswerSelect = (answer) => {
-    setSelectedOption(answer);
-    
-    const newAnswers = [...userAnswers, answer];
-    setUserAnswers(newAnswers);
-  
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        if (config.timerType === "individual") {
-          setTimer(config.timerDuration);
-        }
-        setSelectedOption(null);
-      } else {
-        finishQuiz(newAnswers);
-      }
-    }, 1500);
-  };
-
-  // Timer Effects
-  useEffect(() => {
-    if (quizStarted && !quizFinished) {
-      const interval = setInterval(() => {
-        if (config.timerType === "individual") {
-          setTimer((prev) => prev - 1);
-        } else {
-          setTotalTime((prev) => prev - 1);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [quizStarted, quizFinished, config.timerType]);
-
-  useEffect(() => {
-    if (quizStarted && !quizFinished) {
-      if (config.timerType === "individual" && timer === 0) {
-        handleTimeUp();
-      } else if (config.timerType === "collective" && totalTime === 0) {
-        finishQuiz(userAnswers);
-      }
-    }
-  }, [timer, totalTime, quizStarted, quizFinished, config.timerType]);
-
-  // Time Up Handler
-  const handleTimeUp = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimer(config.timerDuration);
-    } else {
-      finishQuiz(userAnswers);
+      setError("Failed to generate questions. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Finish Quiz and Save Results
-  const finishQuiz = (answers) => {
+    const finishQuiz = useCallback((answers) => {
     const endTime = new Date();
     const timeTaken = (endTime - startTime) / 1000;
     setActualTimeTaken(timeTaken);
@@ -232,78 +183,173 @@ function Quiz() {
 
     const userEmail = localStorage.getItem('token');
 
-    if (!userEmail) {
-      console.error("No user email found in localStorage");
-      return;
+    if (userEmail) {
+      const finalScore = answers.filter(
+        (answer, index) => answer === questions[index]?.correctAnswer
+      ).length;
+
+      const results = {
+        date: new Date().toISOString(),
+        topic: config.topic,
+        difficulty: config.difficulty,
+        timeTaken: timeTaken,
+        score: finalScore,
+        totalQuestions: questions.length,
+        email: userEmail
+      };
+
+      setQuizResults(results);
+
+      axios.post(`${URL}/SaveQuizResults`, results)
+        .then(response => {
+          console.log("Results saved successfully:", response.data);
+        })
+        .catch(error => {
+          console.error("Error saving results:", error.response?.data || error.message);
+        });
     }
+  }, [config.difficulty, config.topic, questions, startTime]);
 
-    const finalScore = answers.filter(
-      (answer, index) => answer === questions[index]?.correctAnswer
-    ).length;
+  const goToNextQuestion = useCallback(() => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+        if (config.timerType === "individual") {
+          setTimer(config.timerDuration);
+        }
+        setSelectedOption(null);
+      } else {
+        finishQuiz(userAnswers);
+      }
+      setIsTransitioning(false);
+    }, 500);
+  }, [currentQuestionIndex, questions.length, config.timerDuration, config.timerType, finishQuiz, userAnswers, isTransitioning]);
 
-    const results = {
-      date: new Date().toISOString(),
-      topic: config.topic,
-      difficulty: config.difficulty,
-      totalTime: totalTime,
-      timeTaken: timeTaken,
-      score: finalScore,
-      totalQuestions: questions.length,
-      email: userEmail
+  const handleTimeUp = useCallback(() => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+      setTimer(config.timerDuration);
+      setSelectedOption(null);
+    } else {
+      finishQuiz(userAnswers);
+    }
+  }, [currentQuestionIndex, questions.length, config.timerDuration, finishQuiz, userAnswers]);
+
+  const handleAnswerSelect = (answer) => {
+    if (isTransitioning) return;
+    
+    setSelectedOption(answer);
+    
+    const newAnswers = [...userAnswers];
+    newAnswers[currentQuestionIndex] = answer;
+    setUserAnswers(newAnswers);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' && quizStarted && !quizFinished && !showConfigModal) {
+        goToNextQuestion();
+      }
     };
 
-    axios.post('http://localhost:5175/SaveQuizResults', results)
-      .then(response => {
-        console.log("Results saved successfully:", response.data);
-      })
-      .catch(error => {
-        console.error("Error saving results:", error.response?.data || error.message);
-      });
-  };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [goToNextQuestion, quizStarted, quizFinished, showConfigModal]);
 
-  // Score Calculation
+  useEffect(() => {
+    let interval = null;
+    
+    if (quizStarted && !quizFinished && !isTransitioning) {
+      interval = setInterval(() => {
+        if (config.timerType === "individual") {
+          setTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              return 0;
+            }
+            return prev - 1;
+          });
+        } else {
+          setTotalTime((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }
+      }, 1000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [quizStarted, quizFinished, config.timerType, isTransitioning]);
+
+  useEffect(() => {
+    if (quizStarted && !quizFinished && !isTransitioning) {
+      if (config.timerType === "individual" && timer === 0) {
+        handleTimeUp();
+      } else if (config.timerType === "collective" && totalTime === 0) {
+        finishQuiz(userAnswers);
+      }
+    }
+  }, [timer, totalTime, quizStarted, quizFinished, config.timerType, handleTimeUp, finishQuiz, userAnswers, isTransitioning]);
+
   const calculateScore = () => {
-    const allAnswers = quizFinished ? userAnswers : 
-      (currentQuestionIndex === questions.length - 1 
-        ? [...userAnswers, selectedOption] 
-        : userAnswers);
-      
-    return allAnswers.filter(
+    return userAnswers.filter(
       (answer, index) => answer === questions[index]?.correctAnswer
     ).length;
   };
 
-  // Time Formatting
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  // Render
+  const calculatePercentage = () => {
+    return Math.round((calculateScore() / questions.length) * 100);
+  };
+
+  const getFeedback = () => {
+    const percentage = calculatePercentage();
+    if (percentage >= 90) return "Excellent!";
+    if (percentage >= 70) return "Great job!";
+    if (percentage >= 50) return "Good effort!";
+    return "Keep practicing!";
+  };
+
   return (
-    <div style={styles.pageWrapper}>
-      {/* Configuration Modal */}
+    <div className="quiz-page-wrapper">
       {showConfigModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <h2 style={styles.modalTitle}>Quiz Configuration</h2>
-            {error && <p style={{color: 'red'}}>{error}</p>}
-            <label style={styles.label}>
+        <div className="quiz-modal-overlay">
+          <div className="quiz-modal">
+            <h2 className="quiz-modal-title">Quiz Configuration</h2>
+            {error && <div className="quiz-error-message">{error}</div>}
+            
+            <label className="quiz-label">
               Topic:
               <input
                 type="text"
                 value={config.topic}
-                onChange={(e) => setConfig({ ...config, topic: e.target.value })}
-                style={styles.input}
+                onChange={handleTopicChange}
+                className="quiz-input"
+                placeholder="Enter a topic for your quiz"
               />
             </label>
-            <label style={styles.label}>
+            <label className="quiz-label">
               Difficulty:
               <select
                 value={config.difficulty}
                 onChange={handleDifficultyChange}
-                style={styles.input}
+                className="quiz-input"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -311,28 +357,28 @@ function Quiz() {
               </select>
             </label>
 
-            <label style={styles.label}>
+            <label className="quiz-label">
               Number of Questions:
               <input
                 type="number"
                 value={config.numQuestions}
                 onChange={handleNumQuestionsChange}
-                style={styles.input}
+                className="quiz-input"
               />
             </label>
 
-            <label style={styles.label}>
+            <label className="quiz-label">
               Timer Type:
               <select
                 value={config.timerType}
                 onChange={(e) => setConfig({ ...config, timerType: e.target.value })}
-                style={styles.input}
+                className="quiz-input"
               >
                 <option value="individual">Individual</option>
                 <option value="collective">Collective</option>
               </select>
             </label>
-            <label style={styles.label}>
+            <label className="quiz-label">
               Timer Duration ({config.timerType === "individual" ? "seconds" : "minutes"}):
               <input
                 type="number"
@@ -340,180 +386,131 @@ function Quiz() {
                 onChange={(e) =>
                   setConfig({ ...config, timerDuration: parseInt(e.target.value) })
                 }
-                style={styles.input}
+                className="quiz-input"
               />
             </label>
-            <button onClick={handleConfigSubmit} style={styles.button}>
-              Start Quiz
+            <button 
+              onClick={handleConfigSubmit} 
+              className="quiz-button"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="quiz-spinner-container">
+                  <div className="quiz-spinner"></div>
+                  Generating Questions...
+                </div>
+              ) : (
+                "Start Quiz"
+              )}
             </button>
+            
+            {isLoading && (
+              <div className="quiz-generating-message">
+                Please wait while we generate your quiz questions...
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Quiz Questions */}
       {quizStarted && !quizFinished && (
-        <div style={styles.quizFullPage}>
-          <h2 style={styles.questionTitle}>Question {currentQuestionIndex + 1}</h2>
-          <p style={styles.questionText}>{questions[currentQuestionIndex]?.text}</p>
-          <div style={styles.optionsContainer}>
+        <div className="quiz-container">
+          <div className="quiz-progress-container">
+            <div className="quiz-progress-bar" style={{ width: `${progress}%` }} />
+          </div>
+          
+          <h2 className="quiz-question-title">
+            <span className="quiz-question-number">
+              {currentQuestionIndex + 1}
+            </span>
+            Question {currentQuestionIndex + 1} of {questions.length}
+          </h2>
+          
+          <p className="quiz-question-text">{questions[currentQuestionIndex]?.text}</p>
+          
+          <div className="quiz-options-container">
             {questions[currentQuestionIndex]?.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswerSelect(option)}
-                style={{
-                  ...styles.optionButton,
-                  ...(selectedOption === option ? styles.glow : {}),
-                }}
+                className={`quiz-option-button ${selectedOption === option ? 'quiz-option-selected' : ''}`}
               >
                 {option}
               </button>
             ))}
           </div>
+          
+          <button 
+            ref={nextButtonRef}
+            onClick={goToNextQuestion} 
+            className="quiz-next-button"
+          >
+            {currentQuestionIndex < questions.length - 1 ? 'Next' : 'Finish'}
+          </button>
+          
+          <p className="quiz-keyboard-hint">Press Enter to go to the next question</p>
+          
           {config.timerType === "individual" ? (
-            <p style={styles.timer}>Time Remaining: {timer} seconds</p>
+            <p className="quiz-timer">Time Remaining: {timer} seconds</p>
           ) : (
-            <p style={styles.timer}>Total Time Remaining: {formatTime(totalTime)}</p>
+            <p className="quiz-timer">Total Time Remaining: {formatTime(totalTime)}</p>
           )}
         </div>
       )}
 
-      {/* Quiz Results */}
       {quizFinished && (
-        <div style={styles.quizFullPage}>
-          <h2 style={styles.resultTitle}>Quiz Finished!</h2>
-          <p style={styles.resultText}>
-            Your Score: {calculateScore()} / {questions.length}
-          </p>
-          <p style={styles.resultText}>
-            Time Taken: {formatTime(actualTimeTaken)}
-          </p>
-          <p style={styles.resultText}>
-            <strong>Good Job !</strong>
-          </p>
-          <p style={styles.resultText}>
-            <strong>Keep Practicing !</strong>
-          </p>
+        <div className="quiz-results-container">
+          <div className="quiz-results-card">
+            <h2 className="quiz-results-title">Quiz Results</h2>
+            
+            <div className="quiz-score-circle">
+              <div className="quiz-score-inner">
+                <span className="quiz-score-value">
+                  {calculateScore()}/{questions.length}
+                </span>
+                <span className="quiz-score-percentage">{calculatePercentage()}%</span>
+              </div>
+            </div>
+            
+            <div className="quiz-feedback">{getFeedback()}</div>
+            
+            <div className="quiz-results-details">
+              <div className="quiz-result-item">
+                <span className="quiz-result-label">Topic:</span>
+                <span className="quiz-result-value">{config.topic || "General"}</span>
+              </div>
+              
+              <div className="quiz-result-item">
+                <span className="quiz-result-label">Difficulty:</span>
+                <span className="quiz-result-value">{config.difficulty}</span>
+              </div>
+              
+              <div className="quiz-result-item">
+                <span className="quiz-result-label">Time taken:</span>
+                <span className="quiz-result-value">{actualTimeTaken.toFixed(2)} seconds</span>
+              </div>
+            </div>
+
+            {!localStorage.getItem('token') && (
+              <div className="quiz-not-logged-in-message">
+                You're not logged in. These results won't be saved to your profile.
+              </div>
+            )}
+            
+            <button 
+              onClick={() => {
+                setShowConfigModal(true);
+                setQuizFinished(false);
+              }} 
+              className="quiz-button quiz-new-button"
+            >
+              New Quiz
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
 }
-
-const styles = {
-  pageWrapper: {
-    height: "100vh",
-    width: "100vw",
-    backgroundColor: "#f7fafc",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    padding: "40px",
-    position: "relative",
-  },
-  modalOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100vh",
-    width: "100vw",
-    backdropFilter: "blur(6px)",
-    backgroundColor: "#eff6ff",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10,
-  },
-  modal: {
-    backgroundColor: "#ffffff",
-    padding: "30px",
-    borderRadius: "10px",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
-    maxWidth: "400px",
-    width: "90%",
-    textAlign: "center",
-  },
-  modalTitle: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    color: "#2d3748",
-  },
-  label: {
-    display: "block",
-    margin: "10px 0",
-    fontSize: "16px",
-    color: "#4a5568",
-    textAlign: "left",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginTop: "5px",
-    borderRadius: "5px",
-    border: "1px solid #e2e8f0",
-    fontSize: "16px",
-  },
-  button: {
-    marginTop: "20px",
-    padding: "10px 20px",
-    backgroundColor: "#4299e1",
-    color: "#ffffff",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  },
-  quizFullPage: {
-    width: "100%",
-    textAlign: "left",
-  },
-  questionTitle: {
-    fontSize: "28px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-    color: "#2d3748",
-  },
-  questionText: {
-    fontSize: "20px",
-    marginBottom: "20px",
-    color: "#4a5568",
-  },
-  optionsContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  optionButton: {
-    padding: "12px 24px",
-    backgroundColor: "#edf2f7",
-    border: "1px solid #e2e8f0",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-    textAlign: "left",
-  },
-  glow: {
-    animation: "glow 1.5s infinite",
-    borderColor: "#4299e1",
-  },
-  timer: {
-    marginTop: "20px",
-    fontSize: "16px",
-    color: "#e53e3e",
-  },
-  resultTitle: {
-    fontSize: "28px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-    color: "#2d3748",
-  },
-  resultText: {
-    fontSize: "20px",
-    color: "#4a5568",
-  },
-};
 
 export default Quiz;

@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { FaBrain, FaClock, FaChartLine } from 'react-icons/fa'; // Icons for benefits
+import { FaBrain, FaClock, FaChartLine } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +28,8 @@ function Home() {
 
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
-    localStorage.setItem("selectedTopic", topic); // Overwrite previous topic
-    navigate("/Quiz"); // Navigate to Quiz page
+    localStorage.setItem("selectedTopic", topic); 
+    navigate("/Quiz"); 
   };
 
   const handleGenerateClick = () => {
@@ -50,7 +50,6 @@ function Home() {
         </h1>
         <p className="text-2xl text-black/90 mb-4">Your AI-powered quiz companion 🎯</p>
 
-        {/* Description Section */}
         <div className="space-y-6">
           <p className="text-lg text-black/80 leading-relaxed">
             At <strong className="font-semibold text-blue-600">QuizWhiz</strong>, we believe learning should be exciting, engaging, and effortless. Our smart AI generates unique quizzes every time you click "Start," designed to challenge you and sharpen your knowledge across diverse topics. Whether you're here to boost your grades, prepare for competitive exams, or just have some fun while learning something new.
@@ -60,14 +59,11 @@ function Home() {
           </p>
         </div>
 
-        {/* Call-to-Action Text */}
         <p className="text-blue-500 font-medium mt-6">
           Ready to test yourself? Let’s make learning an adventure!
         </p>
         <br />
-        {/* Topic Input Section */}
         <div className="flex items-center justify-center mt-6 flex-col">
-          {/* Search Bar */}
           <div className="flex w-full max-w-5xl group transition-all duration-300 hover:scale-105 focus-within:scale-105 rounded-full ring-2 ring-blue-400 ring-opacity-20 focus-within:ring-0 focus-within:shadow-[0_0_10px_2px_rgba(79,109,255,0.3),0_0_20px_5px_rgba(79,109,255,0.2),0_0_30px_10px_rgba(79,109,255,0.1)]">
             <input
               type="text"
@@ -78,17 +74,15 @@ function Home() {
             />
             <button
               className="px-8 py-3 bg-blue-400 text-black font-semibold rounded-r-full shadow-md border border-blue-400 transition-colors duration-300 group-hover:bg-blue-500 focus:bg-blue-500"
-              onClick={handleGenerateClick} // Use the validation function
+              onClick={handleGenerateClick}
             >
               Generate
             </button>
           </div>
           <br />
 
-          {/* Suggestions Text */}
           <p className="mt-4 text-black/80 text-sm">Try one of these popular topics:</p>
 
-          {/* Suggestions Buttons */}
           <div className="mt-4 flex flex-wrap gap-3 justify-center">
             {[
               "Math Basics", "World History", "Physics Principles", "Computer Science",
@@ -109,12 +103,9 @@ function Home() {
         </div>
       </div>
 
-      {/* Page 2: Additional Content */}
       <div className="container mx-auto mt-16 p-10 max-w-8xl text-center font-roboto">
-        {/* Research-Backed Benefits Section */}
         <h2 className="text-4xl font-bold mb-8 text-black">Why Quizzes Are Effective</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Benefit 1: Active Recall */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="flex justify-center mb-6">
               <FaBrain className="text-6xl text-blue-600" /> {/* Icon */}
@@ -128,7 +119,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Benefit 2: Spaced Repetition */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="flex justify-center mb-6">
               <FaClock className="text-6xl text-blue-600" /> {/* Icon */}
@@ -142,7 +132,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Benefit 3: Immediate Feedback */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="flex justify-center mb-6">
               <FaChartLine className="text-6xl text-blue-600" /> {/* Icon */}
@@ -157,10 +146,8 @@ function Home() {
           </div>
         </div>
 
-        {/* Features Section */}
         <h2 className="text-4xl font-bold mt-16 mb-8 text-black">Why Choose QuizWhiz?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Feature 1 */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <h3 className="text-2xl font-semibold mb-4 text-blue-600">AI-Powered Quizzes</h3>
             <p className="text-lg text-black/80">
@@ -168,7 +155,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Feature 2 */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <h3 className="text-2xl font-semibold mb-4 text-blue-600">Diverse Topics</h3>
             <p className="text-lg text-black/80">
@@ -176,7 +162,6 @@ function Home() {
             </p>
           </div>
 
-          {/* Feature 3 */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <h3 className="text-2xl font-semibold mb-4 text-blue-600">Track Your Progress</h3>
             <p className="text-lg text-black/80">
@@ -185,10 +170,8 @@ function Home() {
           </div>
         </div>
 
-        {/* Testimonials Section */}
         <h2 className="text-4xl font-bold mt-16 mb-8 text-black">What Our Users Say</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Testimonial 1 */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-4">
             <img
               src="./public/images/person.jpeg"
@@ -201,7 +184,6 @@ function Home() {
             <p className="text-black/90 font-semibold">— Sarah, College Student</p>
           </div>
 
-          {/* Testimonial 2 */}
           <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center space-y-4">
             <img
               src="./public/images/person.jpeg"
@@ -215,7 +197,6 @@ function Home() {
           </div>
         </div>
 
-        {/* Call-to-Action Section */}
         <Link
           to=""
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
