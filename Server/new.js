@@ -4,7 +4,7 @@ const cors = require('cors');
 const SignUpModel = require('./models/SignUpSchema');
 const Results = require('./models/ResultSchema');
 require('dotenv').config();
-
+const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(express.json());
@@ -40,11 +40,17 @@ app.get('/', (req, res) => {
 app.post('/Login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await SignUpModel.findOne({ email: email, password: password });
-        if (!user) {
-            return res.status(401).json({ message: "Invalid email or password" });
-        }
-        res.json({ message: "Login successful"});
+      const user = await SignUpModel.findOne({ email: email });
+      if (!user) {
+        return res.status(401).json({ message: "No such account exists" });
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      res.json({ message: "Login successful"});
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

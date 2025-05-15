@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaExclamationCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import.meta.env
 function Login() {
 
     const URL = import.meta.env.VITE_API_URL;
