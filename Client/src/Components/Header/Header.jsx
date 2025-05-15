@@ -88,14 +88,14 @@ function Header() {
                   >
                     <div className="profile-picture-container relative w-10 h-10 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
                       <img
-                        src="public/Images/person.png"
+                        src="/Images/person.png"
                         alt="Profile"
                         className="w-full h-full object-cover transition-transform duration-300"
                       />
                     </div>
                     <div className={`logout-container absolute left-5 top-0 h-10 rounded-r-full bg-red-500 flex items-center overflow-hidden transition-all duration-300 z-0 shadow-md ${showLogout ? 'w-24 px-2' : 'w-0'}`}>
                       <button 
-                        className={`bg-red-500 text-white border-0 whitespace-nowrap transition-all duration-300 flex items-center text-sm p-0 ${showLogout ? 'opacity-100 translate-x-0 delay-100' : 'opacity-0 -translate-x-2'}`}
+                        className={`bg-red-500 text-white border-0 whitespace-nowrap transition-all duration-300 flex items-center text-sm p-3 ${showLogout ? 'opacity-100 translate-x-0 delay-100' : 'opacity-0 -translate-x-2'}`}
                         onClick={handleLogout}
                       >
                         <FaSignOutAlt className="mr-2" /> Logout

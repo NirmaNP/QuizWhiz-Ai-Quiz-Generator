@@ -25,11 +25,13 @@ mongoose.connect(`${URL}/UserDetails`)
     });
 
 
-    app.post('/Signup', (req, res) => {
-    SignUpModel.create(req.body)
-        .then(userDetails => res.json({ message: "User registered successfully!", userDetails }))
-        .catch(err => res.status(500).json({ error: err.message }));
-});
+// app.post('/Signup', (req, res) => {
+// SignUpModel.create(req.body)
+//     .then(userDetails => res.json({ message: "User registered successfully!", userDetails }))
+//     .catch(err => res.status(500).json({ error: err.message }));
+// });
+app.use('/signup',require('./routes/auth'))
+
 
 app.get('/', (req, res) => {
   res.send('Backend is running!');
