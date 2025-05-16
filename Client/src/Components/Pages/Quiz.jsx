@@ -174,40 +174,55 @@ function Quiz() {
     }
   };
 
-    const finishQuiz = useCallback((answers) => {
-    const endTime = new Date();
-    const timeTaken = (endTime - startTime) / 1000;
-    setActualTimeTaken(timeTaken);
-    setQuizFinished(true);
-    setQuizStarted(false);
+  const finishQuiz = useCallback(async (answers) => {  
+      const endTime = new Date();
+      const timeTaken = (endTime - startTime) / 1000;
+      setActualTimeTaken(timeTaken);
+      setQuizFinished(true);
+      setQuizStarted(false);
 
-    const userEmail = localStorage.getItem('token');
+      try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+              setIsLoggedIn(false);
+              return;
+          }
 
-    if (userEmail) {
-      const finalScore = answers.filter(
-        (answer, index) => answer === questions[index]?.correctAnswer
-      ).length;
+          const userResponse = await fetch(`${URL}/user/getuser`, {
+              method: 'POST',
+              headers: {
+                  'auth-token': token,
+                  'Content-Type': 'application/json',
+              },
+          });
 
-      const results = {
-        date: new Date().toISOString(),
-        topic: config.topic,
-        difficulty: config.difficulty,
-        timeTaken: timeTaken,
-        score: finalScore,
-        totalQuestions: questions.length,
-        email: userEmail
-      };
+          if (!userResponse.ok) {
+              throw new Error("Failed to fetch user");
+          }
 
-      setQuizResults(results);
+          const userData = await userResponse.json();
+          const userEmail = userData.email;
 
-      axios.post(`${URL}/SaveQuizResults`, results)
-        .then(response => {
-          console.log("Results saved successfully:", response.data);
-        })
-        .catch(error => {
-          console.error("Error saving results:", error.response?.data || error.message);
-        });
-    }
+          const finalScore = answers.filter(
+              (answer, index) => answer === questions[index]?.correctAnswer
+          ).length;
+
+          const results = {
+              date: new Date().toISOString(),
+              topic: config.topic,
+              difficulty: config.difficulty,
+              timeTaken: timeTaken,
+              score: finalScore,
+              totalQuestions: questions.length,
+              email: userEmail
+          };
+          setQuizResults(results);
+          const saveResponse = await axios.post(`${URL}/SaveQuizResults`, results);
+          console.log("Results saved successfully:", saveResponse.data);
+      } catch (error) {
+          console.error("Error in finishQuiz:", error);
+          setIsLoggedIn(false);
+      }
   }, [config.difficulty, config.topic, questions, startTime]);
 
   const goToNextQuestion = useCallback(() => {

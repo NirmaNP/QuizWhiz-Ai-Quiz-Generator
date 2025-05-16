@@ -22,22 +22,35 @@ function Results() {
       return;
     }
 
-    setIsLoggedIn(true);
-    fetch(`${URL}/GetUserResults/${token}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch results');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setResults(data);
+    const fetchData = async () => {
+      try {
+        const userResponse = await fetch(`${URL}/user/getuser`, {
+          method: 'POST',
+          headers: {
+            'auth-token': `${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!userResponse.ok) throw new Error("Failed to fetch user");
+        const userData = await userResponse.json();
+        setIsLoggedIn(true);
+
+        const resultsResponse = await fetch(`${URL}/GetUserResults/${userData.email}`);
+        
+        if (!resultsResponse.ok) throw new Error("Failed to fetch results");
+        const resultsData = await resultsResponse.json();
+
+        setResults(resultsData);
+      } catch (err) {
+        console.error("Error:", err);
+        setIsLoggedIn(false); 
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to fetch results:", err);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, [token]);
 
   const formatTime = (seconds) => {

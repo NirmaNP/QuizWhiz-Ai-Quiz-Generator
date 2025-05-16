@@ -4,11 +4,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUserFriends, FaChartLine, FaCogs, FaSignOutAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('token');
@@ -29,6 +30,7 @@ function Header() {
     localStorage.removeItem('token');
     console.log("Token removed from local storage: " + localStorage.getItem('token'));
     window.dispatchEvent(new Event('auth-change'));
+    navigate('/');  
   };
 
   return (

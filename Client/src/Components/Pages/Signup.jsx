@@ -131,9 +131,7 @@ function Signup() {
                 password: formData.password
             })
             .then(result => {
-                console.log("Signup successful:", result.data);
-                localStorage.setItem('token', formData.email);
-                console.log("Token stored in local storage: " + localStorage.getItem('token'));
+                localStorage.setItem('token', result.data.authToken);
                 navigate('/'); 
             })
             .catch(err => {

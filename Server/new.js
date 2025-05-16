@@ -25,36 +25,14 @@ mongoose.connect(`${URL}/UserDetails`)
     });
 
 
-// app.post('/Signup', (req, res) => {
-// SignUpModel.create(req.body)
-//     .then(userDetails => res.json({ message: "User registered successfully!", userDetails }))
-//     .catch(err => res.status(500).json({ error: err.message }));
-// });
-app.use('/signup',require('./routes/auth'))
-
-
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 
-app.post('/Login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-      const user = await SignUpModel.findOne({ email: email });
-      if (!user) {
-        return res.status(401).json({ message: "No such account exists" });
-      }
+app.use('/signup',require('./routes/auth'))
+app.use('/login',require('./routes/auth'));
+app.use('/user',require('./routes/auth'));
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-          return res.status(401).json({ message: "Invalid email or password" });
-      }
-      
-      res.json({ message: "Login successful"});
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 app.post('/SaveQuizResults', async (req, res) => {
     try {
