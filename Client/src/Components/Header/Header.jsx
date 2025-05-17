@@ -4,15 +4,34 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUserFriends, FaChartLine, FaCogs, FaSignOutAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
+  const [userName, setUserName] = useState('');
+  const navigate = useNavigate();
+  const URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       const token = localStorage.getItem('token');
       setIsLoggedIn(!!token);
+      console.log(token);
+      if (token) {
+        try {
+          const response = await axios.post(`${URL}/user/getuser`,null,{
+            headers: {
+              'auth-token': token
+            }
+          });
+          setUserName(response.data.name);
+          console.log(userName);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
     };
 
     checkAuth();
@@ -27,8 +46,9 @@ function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    console.log("Token removed from local storage: " + localStorage.getItem('token'));
+    setUserName('');
     window.dispatchEvent(new Event('auth-change'));
+    navigate('/');  
   };
 
   return (
@@ -79,26 +99,39 @@ function Header() {
                 <FaCogs className="mr-2" /> Quiz
               </Nav.Link>
 
-              <div className="auth-section w-40 ml-5">
+              <div className="auth-section w-40 ml-5 mr-5">
                 {isLoggedIn ? (
                   <div 
                     className="profile-container relative flex items-center right-0"
                     onMouseEnter={() => setShowLogout(true)}
                     onMouseLeave={() => setShowLogout(false)}
                   >
-                    <div className="profile-picture-container relative w-10 h-10 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
-                      <img
-                        src="/Images/person.png"
-                        alt="Profile"
-                        className="w-full h-full object-cover transition-transform duration-300"
-                      />
+                    <div className="flex items-center">
+                      <div className="profile-picture-container relative w-11 h-11 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
+                        <img
+                          src="/Images/person.png"
+                          alt="Profile"
+                          className="w-full h-full object-cover transition-transform duration-300"
+                        />
+                      </div>
+                      {userName && (
+                        <span className="ml-2 text-white font-medium">
+                          {userName}
+                        </span>
+                      )}
                     </div>
-                    <div className={`logout-container absolute left-5 top-0 h-10 rounded-r-full bg-red-500 flex items-center overflow-hidden transition-all duration-300 z-0 shadow-md ${showLogout ? 'w-24 px-2' : 'w-0'}`}>
+                    <div className={`
+                      absolute left-0 h-10 flex items-center
+                      bg-red-500 rounded-full overflow-hidden
+                      transition-all duration-300 ease-in-out
+                      ${showLogout ? 'w-40 pl-10 opacity-100' : 'w-0 opacity-0'}
+                    `}>
                       <button 
-                        className={`bg-red-500 text-white border-0 whitespace-nowrap transition-all duration-300 flex items-center text-sm p-3 ${showLogout ? 'opacity-100 translate-x-0 delay-100' : 'opacity-0 -translate-x-2'}`}
+                        className="flex items-center gap-2 text-white text-sm px-3 whitespace-nowrap"
                         onClick={handleLogout}
                       >
-                        <FaSignOutAlt className="mr-2" /> Logout
+                        <FaSignOutAlt className="text-xs" /> 
+                        <span>Logout</span>
                       </button>
                     </div>
                   </div>

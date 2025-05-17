@@ -174,40 +174,43 @@ function Quiz() {
     }
   };
 
-    const finishQuiz = useCallback((answers) => {
-    const endTime = new Date();
-    const timeTaken = (endTime - startTime) / 1000;
-    setActualTimeTaken(timeTaken);
-    setQuizFinished(true);
-    setQuizStarted(false);
+  const finishQuiz = useCallback(async (answers) => {  
+      const endTime = new Date();
+      const timeTaken = (endTime - startTime) / 1000;
+      setActualTimeTaken(timeTaken);
+      setQuizFinished(true);
+      setQuizStarted(false);
 
-    const userEmail = localStorage.getItem('token');
+      try {
+          const token = localStorage.getItem('token');
+          if (!token) return;
+          // console.log(token);
+          
+          const finalScore = answers.filter(
+              (answer, index) => answer === questions[index]?.correctAnswer
+          ).length;
 
-    if (userEmail) {
-      const finalScore = answers.filter(
-        (answer, index) => answer === questions[index]?.correctAnswer
-      ).length;
-
-      const results = {
-        date: new Date().toISOString(),
-        topic: config.topic,
-        difficulty: config.difficulty,
-        timeTaken: timeTaken,
-        score: finalScore,
-        totalQuestions: questions.length,
-        email: userEmail
-      };
-
-      setQuizResults(results);
-
-      axios.post(`${URL}/SaveQuizResults`, results)
-        .then(response => {
-          console.log("Results saved successfully:", response.data);
-        })
-        .catch(error => {
-          console.error("Error saving results:", error.response?.data || error.message);
-        });
-    }
+          const results = {
+              date: new Date().toISOString(),
+              topic: config.topic,
+              difficulty: config.difficulty,
+              timeTaken: timeTaken,
+              score: finalScore,
+              totalQuestions: questions.length
+          };
+          setQuizResults(results);
+          const saveResponse = await axios.post(`${URL}/results/SaveQuizResults`, results, 
+          {
+            headers: {
+              'Content-Type': 'application/json', 
+              'auth-token': token,
+            }
+          }
+        );
+        console.log("Results saved successfully:", saveResponse.data);
+      } catch (error) {
+          console.error("Error in finishQuiz:", error);
+      }
   }, [config.difficulty, config.topic, questions, startTime]);
 
   const goToNextQuestion = useCallback(() => {

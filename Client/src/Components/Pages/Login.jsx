@@ -85,14 +85,10 @@ function Login() {
             setIsLoading(true);
             setErrors(prev => ({ ...prev, form: '' }));
             
-            axios.post(`${URL}/Login`, formData)
+            axios.post(`${URL}/user/checkuser`, formData)
                 .then(result => {
-                    console.log("Login successful:", result.data);
-                    localStorage.setItem('token', formData.email);
-                    console.log("Token stored in local storage: "+localStorage.getItem('token'));
-                    
+                    localStorage.setItem('token', result.data.authToken);
                     window.dispatchEvent(new Event('auth-change'));
-                    
                     navigate('/');  
                 })
                 .catch(err => {

@@ -125,15 +125,13 @@ function Signup() {
             setIsLoading(true);
             setErrors(prev => ({ ...prev, form: "" }));
             
-            axios.post(`${URL}/signup/createuser`, {
+            axios.post(`${URL}/user/createuser`, {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password
             })
             .then(result => {
-                console.log("Signup successful:", result.data);
-                localStorage.setItem('token', formData.email);
-                console.log("Token stored in local storage: " + localStorage.getItem('token'));
+                localStorage.setItem('token', result.data.authToken);
                 navigate('/'); 
             })
             .catch(err => {
