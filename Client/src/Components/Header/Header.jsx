@@ -107,7 +107,11 @@ function Header() {
                     onMouseLeave={() => setShowLogout(false)}
                   >
                     <div className="flex items-center">
+<<<<<<< HEAD
                       <div className="profile-picture-container relative w-11 h-11 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
+=======
+                      <div className="profile-picture-container relative w-10 h-10 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
+>>>>>>> 8b2420ec33054fe69007788326ee6019206ff3a4
                         <img
                           src="/Images/person.png"
                           alt="Profile"
@@ -120,6 +124,7 @@ function Header() {
                         </span>
                       )}
                     </div>
+<<<<<<< HEAD
                     <div className={`
                       absolute left-0 h-10 flex items-center
                       bg-red-500 rounded-full overflow-hidden
@@ -128,6 +133,11 @@ function Header() {
                     `}>
                       <button 
                         className="flex items-center gap-2 text-white text-sm px-3 whitespace-nowrap"
+=======
+                    <div className={`logout-container absolute top-full right-0 mt-2 rounded-md bg-red-500 flex items-center overflow-hidden transition-all duration-300 z-0 shadow-md ${showLogout ? 'h-10 w-24 px-2 opacity-100' : 'h-0 w-0 opacity-0'}`}>
+                      <button 
+                        className="bg-red-500 text-white border-0 whitespace-nowrap flex items-center text-sm p-3"
+>>>>>>> 8b2420ec33054fe69007788326ee6019206ff3a4
                         onClick={handleLogout}
                       >
                         <FaSignOutAlt className="text-xs" /> 
