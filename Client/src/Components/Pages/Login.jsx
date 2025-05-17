@@ -85,7 +85,7 @@ function Login() {
             setIsLoading(true);
             setErrors(prev => ({ ...prev, form: '' }));
             
-            axios.post(`${URL}/login/checkuser`, formData)
+            axios.post(`${URL}/user/checkuser`, formData)
                 .then(result => {
                     localStorage.setItem('token', result.data.authToken);
                     window.dispatchEvent(new Event('auth-change'));

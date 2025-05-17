@@ -183,26 +183,9 @@ function Quiz() {
 
       try {
           const token = localStorage.getItem('token');
-          if (!token) {
-              setIsLoggedIn(false);
-              return;
-          }
-
-          const userResponse = await fetch(`${URL}/user/getuser`, {
-              method: 'POST',
-              headers: {
-                  'auth-token': token,
-                  'Content-Type': 'application/json',
-              },
-          });
-
-          if (!userResponse.ok) {
-              throw new Error("Failed to fetch user");
-          }
-
-          const userData = await userResponse.json();
-          const userEmail = userData.email;
-
+          if (!token) return;
+          // console.log(token);
+          
           const finalScore = answers.filter(
               (answer, index) => answer === questions[index]?.correctAnswer
           ).length;
@@ -213,15 +196,20 @@ function Quiz() {
               difficulty: config.difficulty,
               timeTaken: timeTaken,
               score: finalScore,
-              totalQuestions: questions.length,
-              email: userEmail
+              totalQuestions: questions.length
           };
           setQuizResults(results);
-          const saveResponse = await axios.post(`${URL}/SaveQuizResults`, results);
-          console.log("Results saved successfully:", saveResponse.data);
+          const saveResponse = await axios.post(`${URL}/results/SaveQuizResults`, results, 
+          {
+            headers: {
+              'Content-Type': 'application/json', 
+              'auth-token': token,
+            }
+          }
+        );
+        console.log("Results saved successfully:", saveResponse.data);
       } catch (error) {
           console.error("Error in finishQuiz:", error);
-          setIsLoggedIn(false);
       }
   }, [config.difficulty, config.topic, questions, startTime]);
 

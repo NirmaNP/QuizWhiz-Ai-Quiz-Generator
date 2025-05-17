@@ -125,7 +125,7 @@ function Signup() {
             setIsLoading(true);
             setErrors(prev => ({ ...prev, form: "" }));
             
-            axios.post(`${URL}/signup/createuser`, {
+            axios.post(`${URL}/user/createuser`, {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password

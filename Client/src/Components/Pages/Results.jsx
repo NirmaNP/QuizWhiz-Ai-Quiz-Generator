@@ -24,23 +24,17 @@ function Results() {
 
     const fetchData = async () => {
       try {
-        const userResponse = await fetch(`${URL}/user/getuser`, {
-          method: 'POST',
-          headers: {
-            'auth-token': `${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        if (!userResponse.ok) throw new Error("Failed to fetch user");
-        const userData = await userResponse.json();
         setIsLoggedIn(true);
+        const resultsResponse = await fetch(`${URL}/results/GetUserResults`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': token,
+          }
+        });
 
-        const resultsResponse = await fetch(`${URL}/GetUserResults/${userData.email}`);
-        
         if (!resultsResponse.ok) throw new Error("Failed to fetch results");
         const resultsData = await resultsResponse.json();
-
         setResults(resultsData);
       } catch (err) {
         console.error("Error:", err);
