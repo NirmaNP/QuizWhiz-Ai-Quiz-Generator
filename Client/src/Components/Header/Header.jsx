@@ -1,33 +1,37 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
-import { FaHome, FaUserFriends, FaChartLine, FaCogs, FaSignOutAlt } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
+import {
+  FaHome,
+  FaUserFriends,
+  FaChartLine,
+  FaCogs,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       setIsLoggedIn(!!token);
-      console.log(token);
       if (token) {
         try {
           const response = await axios.post(`${URL}/user/getuser`, null, {
             headers: {
-              'auth-token': token
-            }
+              "auth-token": token,
+            },
           });
           setUserName(response.data.name);
-          console.log(userName);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -35,20 +39,20 @@ function Header() {
     };
 
     checkAuth();
-    window.addEventListener('storage', checkAuth);
-    window.addEventListener('auth-change', checkAuth);
+    window.addEventListener("storage", checkAuth);
+    window.addEventListener("auth-change", checkAuth);
 
     return () => {
-      window.removeEventListener('storage', checkAuth);
-      window.removeEventListener('auth-change', checkAuth);
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("auth-change", checkAuth);
     };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setUserName('');
-    window.dispatchEvent(new Event('auth-change'));
-    navigate('/');  
+    localStorage.removeItem("token");
+    setUserName("");
+    window.dispatchEvent(new Event("auth-change"));
+    navigate("/");
   };
 
   return (
@@ -75,7 +79,10 @@ function Header() {
             <span className="navbar-toggler-icon"></span>
           </Navbar.Toggle>
 
-          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="justify-content-end"
+          >
             <Nav className="ms-auto flex items-center">
               <Nav.Link
                 as={Link}
@@ -101,18 +108,20 @@ function Header() {
 
               <div className="auth-section w-40 ml-5 mr-5">
                 {isLoggedIn ? (
-                  <div 
+                  <div
                     className="profile-container relative flex items-center right-0"
                     onMouseEnter={() => setShowLogout(true)}
                     onMouseLeave={() => setShowLogout(false)}
                   >
                     <div className="flex items-center">
                       <div className="profile-picture-container relative w-10 h-10 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
-                        <img
-                          src="/Images/person.png"
-                          alt="Profile"
-                          className="w-full h-full object-cover transition-transform duration-300"
-                        />
+                        <Link to="/account">
+                          <img
+                            src="/Images/person.png"
+                            alt="Profile"
+                            className="w-full h-full object-cover transition-transform duration-300"
+                          />
+                        </Link>
                       </div>
                       {userName && (
                         <span className="ml-2 text-white font-medium">
@@ -120,17 +129,19 @@ function Header() {
                         </span>
                       )}
                     </div>
-                    <div className={`
+                    <div
+                      className={`
                       absolute left-0 h-10 flex items-center
                       bg-red-500 rounded-full overflow-hidden
                       transition-all duration-300 ease-in-out
-                      ${showLogout ? 'w-40 pl-10 opacity-100' : 'w-0 opacity-0'}
-                    `}>
-                      <button 
-                        className="flex items-center gap-2 text-white text-sm px-3 whitespace-nowrap"
+                      ${showLogout ? "w-40 pl-10 opacity-100" : "w-0 opacity-0"}
+                    `}
+                    >
+                      <button
+                        className="flex items-center gap-2 bg-transparent text-white text-sm px-3 mb-4 whitespace-nowrap"
                         onClick={handleLogout}
                       >
-                        <FaSignOutAlt className="text-xs" /> 
+                        <FaSignOutAlt className="text-xs" />
                         <span>Logout</span>
                       </button>
                     </div>

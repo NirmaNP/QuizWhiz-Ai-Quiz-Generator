@@ -7,6 +7,7 @@ import Quiz from './Components/Pages/Quiz';
 import Signup from './Components/Pages/Signup';
 import Login from './Components/Pages/Login';
 import Results from './Components/Pages/Results';
+import Account from './Components/Pages/Account/Account';
 
 const Layout = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const Layout = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </div>
       {!hideFooter && <Footer />}

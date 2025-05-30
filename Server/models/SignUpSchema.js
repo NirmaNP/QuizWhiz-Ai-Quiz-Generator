@@ -1,20 +1,32 @@
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 
 const SignUpSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
-        required:true
+        required: true
     },
-    email:{
+    email: {
         type: String,
-        required:true,
-        unique:true
+        required: true,
+        unique: true
     }, 
-    password:{
+    password: {
         type: String,
-        required:true
-    }
+        required: true
+    },
+    bio: {
+        type: String,
+        default: "Passionate learner who enjoys challenging quizzes"
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    avatarImageURL: {
+        type: String,
+        default: ""
+    },
 })
 
-const SignUpModel = new mongoose.model("UserDetails", SignUpSchema)
-module.exports=SignUpModel
+const SignUpModel = mongoose.model("UserDetails", SignUpSchema)
+module.exports = SignUpModel

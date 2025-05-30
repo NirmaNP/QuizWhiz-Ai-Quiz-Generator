@@ -2,7 +2,7 @@ const Results = require('../models/ResultSchema');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/SignUpSchema');
-const fetchuser= require('../Middleware/fetchuser');
+const fetchuser = require('../Middleware/fetchuser');
 require('dotenv').config();
 
 router.get('/GetUserResults', fetchuser, async (req, res) => {
@@ -17,7 +17,7 @@ router.get('/GetUserResults', fetchuser, async (req, res) => {
 
 router.post('/SaveQuizResults', fetchuser, async (req, res) => {
     try {
-        const { date, topic, difficulty, timeTaken, score, totalQuestions} = req.body;
+        const { date, topic, difficulty, timeTaken, score, totalQuestions } = req.body;
         const newResult = new Results({
             user: req.user.id,
             date: date || new Date(),
@@ -37,7 +37,5 @@ router.post('/SaveQuizResults', fetchuser, async (req, res) => {
         });
     }
 });
-
-
 
 module.exports = router;

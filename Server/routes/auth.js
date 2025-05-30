@@ -100,4 +100,68 @@ router.post('/getuser', fetchuser , async (req, res) => {
     }
 });
 
+router.put('/updateuser', fetchuser, async (req, res) => {
+  const { name, bio, selectedAvatarUrl } = req.body;
+  const userId = req.user.id;
+
+  if (!name || typeof name !== 'string' || name.trim().length < 3) {
+    return res.status(400).json({ 
+      success: false, 
+      error: "Name is required and must be at least 3 characters long" 
+    });
+  }
+
+  if (bio && typeof bio !== 'string') {
+    return res.status(400).json({ 
+      success: false, 
+      error: "Bio must be a string" 
+    });
+  }
+
+  if (selectedAvatarUrl && typeof selectedAvatarUrl !== 'string') {
+    return res.status(400).json({ 
+      success: false, 
+      error: "Avatar image url must be a string" 
+    });
+  }
+
+  try {
+    const updateData = { 
+      name: name.trim(),
+      ...(bio && { bio: bio.trim() }),
+      ...(selectedAvatarUrl && { 
+        avatarImageURL: selectedAvatarUrl.trim() // Changed to use selectedAvatarUrl and added trim()
+      })
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { 
+        new: true,
+        select: "-password -__v" 
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ 
+        success: false, 
+        error: "User not found" 
+      });
+    }
+
+    res.json({ 
+      success: true, 
+      user: updatedUser 
+    });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ 
+      success: false, 
+      error: "Server error during profile update" 
+    });
+  }
+});
+
 module.exports = router;
