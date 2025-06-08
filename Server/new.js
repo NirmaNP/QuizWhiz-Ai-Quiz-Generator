@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5174','http://localhost:5173', 'https://quizwhiz-r0yx.onrender.com'],
+  origin: ['http://localhost:5174','http://localhost:5173', 'https://quizwhiz-frontend-mwuc.onrender.com'],
   credentials: true
 }));
 
