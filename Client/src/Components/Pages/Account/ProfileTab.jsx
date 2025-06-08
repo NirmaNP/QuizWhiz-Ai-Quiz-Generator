@@ -11,6 +11,7 @@ export default function ProfileTab({ formData, setFormData, quizStats, updatePro
   const handleSave = async () => {
     setIsEditing(false);
     await updateProfile(formData.name, formData.bio, formData.avatarImageURL);
+    window.location.href = '/account'; 
   };
 
   return (

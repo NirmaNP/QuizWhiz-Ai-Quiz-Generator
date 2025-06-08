@@ -17,6 +17,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const [userName, setUserName] = useState("");
+  const [avatarURL, setAvatarURL] = useState(null);
   const navigate = useNavigate();
   const URL = import.meta.env.VITE_API_URL;
 
@@ -32,6 +33,7 @@ function Header() {
             },
           });
           setUserName(response.data.name);
+          setAvatarURL(response.data.avatarImageURL);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -114,10 +116,12 @@ function Header() {
                     onMouseLeave={() => setShowLogout(false)}
                   >
                     <div className="flex items-center">
-                      <div className="profile-picture-container relative w-10 h-10 rounded-full bg-white border-1 border-black z-10 overflow-hidden">
-                        <Link to="/account">
+                      <div 
+                      className="profile-picture-container z-40 relative w-10 h-10 rounded-full bg-white border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out hover:w-12 hover:h-12 hover:border-2 hover:border-blue-500"
+                      >
+                      <Link to="/account">
                           <img
-                            src="/Images/person.png"
+                            src={avatarURL}
                             alt="Profile"
                             className="w-full h-full object-cover transition-transform duration-300"
                           />
@@ -138,7 +142,7 @@ function Header() {
                     `}
                     >
                       <button
-                        className="flex items-center gap-2 bg-transparent text-white text-sm px-3 mb-4 whitespace-nowrap"
+                        className="flex items-center gap-2 text-white text-sm px-3 whitespace-nowrap"
                         onClick={handleLogout}
                       >
                         <FaSignOutAlt className="text-xs" />

@@ -1,0 +1,18 @@
+{
+  "name": "quizwhiz-ai-quiz-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "frontend":"cd Client && npm run dev",
+    "backend":"cd Server && npm start",
+    "dev":"concurrently -n \"frontend,backend\" -c \"bgBlue,bgYellow\" \"npm run frontend \" \"npm run backend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -3,7 +3,7 @@ import axios from "axios";
 import AccountHeader from "./AccountHeader";
 import ProfileTab from "./ProfileTab";
 import StatsTab from "./StatsTab";
-import AchievementsTab from "./AchievementsTab";
+// import AchievementsTab from "./AchievementsTab";
 import SettingsTab from "./SettingsTab";
 import AvatarModal from "./AvatarModal";
 import { User, Settings, Trophy, BarChart3 } from "lucide-react";
@@ -39,7 +39,7 @@ export default function Account() {
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
     { id: "stats", label: "Statistics", icon: BarChart3 },
-    { id: "achievements", label: "Achievements", icon: Trophy },
+    // { id: "achievements", label: "Achievements", icon: Trophy },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -214,6 +214,7 @@ export default function Account() {
     setFormData((prev) => ({ ...prev, avatarImageURL: url }));
     setShowAvatarModal(false);
     updateProfile(formData.name, formData.bio, url);
+    window.location.href = '/account'; 
   };
 
   if (loading)
@@ -238,7 +239,7 @@ export default function Account() {
           />
         )}
 
-        <div className="flex mb-6 overflow-x-auto container justify-between">
+        <div className="flex mb-6 overflow-x-auto container justify-evenly">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -263,13 +264,14 @@ export default function Account() {
               quizStats={quizStats}
               updateProfile={updateProfile}
             />
+            
           )}
 
           {activeTab === "stats" && (
             <StatsTab quizStats={quizStats} topicStats={topicStats} />
           )}
 
-          {activeTab === "achievements" && <AchievementsTab />}
+          {/* {activeTab === "achievements" && <AchievementsTab />} */}
 
           {activeTab === "settings" && <SettingsTab />}
         </div>

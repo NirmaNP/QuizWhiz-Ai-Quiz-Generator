@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/SignUpSchema');
+const QuizResult = require('../models/ResultSchema');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const fetchuser= require('../Middleware/fetchuser');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = '123456789';
-
+const JWT_SECRET = process.env.JWT_SECRET;
+require('dotenv').config();
 //Route 1
 router.post('/createuser', [
     body('name', 'Enter a valid name (min 3 characters)').isLength({ min: 3 }),
@@ -130,7 +131,7 @@ router.put('/updateuser', fetchuser, async (req, res) => {
       name: name.trim(),
       ...(bio && { bio: bio.trim() }),
       ...(selectedAvatarUrl && { 
-        avatarImageURL: selectedAvatarUrl.trim() // Changed to use selectedAvatarUrl and added trim()
+        avatarImageURL: selectedAvatarUrl.trim() 
       })
     };
 
@@ -162,6 +163,90 @@ router.put('/updateuser', fetchuser, async (req, res) => {
       error: "Server error during profile update" 
     });
   }
+});
+
+
+
+
+router.put('/updatepassword', fetchuser, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id;
+
+  if (!currentPassword || typeof currentPassword !== 'string') {
+    return res.status(400).json({
+      success: false,
+      error: "Current password is required"
+    });
+  }
+
+  if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 8) {
+    return res.status(400).json({
+      success: false,
+      error: "New password must be at least 8 characters long"
+    });
+  }
+
+  try {
+    const user = await User.findById(userId).select('+password');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: "User not found"
+      });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        error: "Current password is incorrect"
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    const userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
+
+    res.json({
+      success: true,
+      message: "Password updated successfully",
+      user: userWithoutPassword
+    });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({
+      success: false,
+      error: "Server error during password change"
+    });
+  }
+});
+
+
+router.delete('/deleteaccount', fetchuser, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        await QuizResult.deleteMany({ user: userId });
+        await User.findByIdAndDelete(userId);
+
+        res.json({ 
+            success: true,
+            message: "Account and all associated data deleted successfully"
+        });
+
+    } catch (err) {
+        console.error('Account deletion error:', err);
+        res.status(500).json({ 
+            success: false,
+            error: "Server error during account deletion" 
+        });
+    }
 });
 
 module.exports = router;

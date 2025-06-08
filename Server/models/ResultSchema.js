@@ -14,4 +14,5 @@ const resultsSchema = new mongoose.Schema({
   totalQuestions: { type: Number, required: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Results', resultsSchema);
+const ResultsModel = mongoose.model("Results", resultsSchema)
+module.exports = ResultsModel

@@ -1,3 +1,4 @@
+// Website created and maintained by Nikhil Solanki and Princy Pandya, 2025 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Components/Header/Header';
@@ -8,6 +9,7 @@ import Signup from './Components/Pages/Signup';
 import Login from './Components/Pages/Login';
 import Results from './Components/Pages/Results';
 import Account from './Components/Pages/Account/Account';
+import FAQ from './Components/Pages/FAQ';
 
 const Layout = () => {
   const location = useLocation();
@@ -27,6 +29,7 @@ const Layout = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/results" element={<Results />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
       </div>
       {!hideFooter && <Footer />}
