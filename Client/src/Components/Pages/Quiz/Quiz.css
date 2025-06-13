@@ -1,51 +1,78 @@
 /* Quiz.css */
 .quiz-page-wrapper {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
-    width: 100%;
-    background-color: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  background: linear-gradient(135deg, #f0f4ff 0%, #fdfdfd 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.quiz-modal-overlay {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(10px) saturate(120%);
+  background-color: rgba(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: slideUp 0.4s ease-out;
+}
+
+.quiz-modal {
+  background: rgba(255, 255, 255);
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 200, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+
+.quiz-modal-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.8rem;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .quiz-modal-overlay {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 1rem;
+  to {
+    opacity: 1;
   }
-  
-  .quiz-modal {
-    background-color: white;
-    padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
   }
-  
-  .quiz-modal-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: #1e293b;
-    background: linear-gradient(90deg, #3b82f6, #6366f1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
+}
+
   
   .quiz-label {
     display: block;

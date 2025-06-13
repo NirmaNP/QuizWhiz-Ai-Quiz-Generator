@@ -4,12 +4,14 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Home from './Components/Pages/Home';
-import Quiz from './Components/Pages/Quiz';
-import Signup from './Components/Pages/Signup';
-import Login from './Components/Pages/Login';
-import Results from './Components/Pages/Results';
+import Quiz from './Components/Pages/Quiz/Quiz';
+import Signup from './Components/Pages/Authentication/Signup/Signup';
+import Login from './Components/Pages/Authentication/Login/Login';
+import Results from './Components/Pages/Results/Results';
 import Account from './Components/Pages/Account/Account';
-import FAQ from './Components/Pages/FAQ';
+// import ParticlesComponent from './Components/Particles/Particles';
+import About from './Components/Pages/About';
+import Help from './Components/Pages/Help';
 
 const Layout = () => {
   const location = useLocation();
@@ -21,6 +23,7 @@ const Layout = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {!hideHeader && <Header />}
+      {/* <ParticlesComponent/> */}
       <div style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,7 +32,8 @@ const Layout = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/results" element={<Results />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/faq" element={<FAQ />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </div>
       {!hideFooter && <Footer />}

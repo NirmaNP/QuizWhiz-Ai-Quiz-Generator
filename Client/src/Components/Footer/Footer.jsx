@@ -43,7 +43,7 @@ function Footer() {
 
             <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Categories</h6>
-              <div className="d-flex flex-column gap-2">
+              <div className="d-flex flex-column">
                 {categories.map((category) => (
                   <div
                     key={category.name}
@@ -86,7 +86,7 @@ function Footer() {
                         {category.topics.map((topic) => (
                           <div
                             key={topic}
-                            className="py-1 hover:bg-gray-50 rounded px-2 transition-colors"
+                            className="hover:bg-gray-50 rounded px-2 transition-colors"
                           >
                             <button
                               onClick={() => handleCategoryClick(topic)}
@@ -123,29 +123,25 @@ function Footer() {
               <p>
                 <span
                   className="text-reset cursor-pointer"
-                  onClick={() => navigate("/faq")}
+                  onClick={() => navigate("/help")}
                 >
                   FAQ / Support
                 </span>
               </p>
             </div>
 
-            <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-3">
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
               <p className="mb-1">
                 <i className="fas fa-envelope me-2 block"></i>
-                princytpandya@gmail.com
-              </p>
-              <p className="mb-0">
-                <i className="fas fa-envelope me-2 block"></i>
-                nikhilsolanki9876@gmail.com
+                support@quizwhiz.com
               </p>
             </div>
           </div>
         </div>
       </section>
       <div
-        className="text-center p-3"
+        className="text-center px-10 py-4 sm:p-3 "
         style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
       >
         <p className="mb-1">

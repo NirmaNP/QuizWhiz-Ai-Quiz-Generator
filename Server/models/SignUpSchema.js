@@ -24,7 +24,7 @@ const SignUpSchema = new mongoose.Schema({
     },
     avatarImageURL: {
         type: String,
-        default: ""
+        default: "https://api.dicebear.com/7.x/identicon/svg?seed=mockingbird_turquoise"
     },
 })
 

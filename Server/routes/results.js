@@ -14,27 +14,53 @@ router.get('/GetUserResults', fetchuser, async (req, res) => {
     }
 });
 
-
+// In your backend routes file
 router.post('/SaveQuizResults', fetchuser, async (req, res) => {
     try {
-        const { date, topic, difficulty, timeTaken, score, totalQuestions } = req.body;
-        const newResult = new Results({
-            user: req.user.id,
-            date: date || new Date(),
+        const {
+            date,
             topic,
             difficulty,
             timeTaken,
             score,
-            totalQuestions
+            totalQuestions,
+            questions,
+            config
+        } = req.body;
+
+        const newResult = new Results({
+            user: req.user.id,
+            date,
+            topic,
+            difficulty,
+            timeTaken,
+            score,
+            totalQuestions,
+            questions,
+            config,
+            percentage: Math.round((score / totalQuestions) * 100)
         });
 
         await newResult.save();
-        res.status(201).json({ message: 'Results saved successfully' });
+        res.status(201).json(newResult);
     } catch (error) {
-        console.error("Backend error:", error);
-        res.status(500).json({
-            message: 'Error saving results'
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+router.delete('/ClearUserResults', fetchuser, async (req, res) => {
+    try {
+        const deleted = await Results.deleteMany({ user: req.user.id });
+
+        res.json({
+            message: 'All results cleared successfully',
+            deletedCount: deleted.deletedCount
         });
+    } catch (error) {
+        console.error('Error clearing results:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 

@@ -6,43 +6,75 @@ export default function StatsTab({ quizStats, topicStats }) {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Quiz Statistics</h2>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard value={quizStats.totalQuizzes} label="Total Quizzes" color="blue" />
-        <StatCard value={`${quizStats.averageScore}%`} label="Average Score" color="green" />
-        <StatCard value={`${quizStats.bestScore}%`} label="Best Score" color="purple" />
-        <StatCard value={quizStats.currentStreak} label="Day Streak" color="orange" />
+        <StatCard
+          value={quizStats.totalQuizzes}
+          label="Total Quizzes"
+          color="blue"
+        />
+        <StatCard
+          value={`${quizStats.averageScore}%`}
+          label="Average Score"
+          color="green"
+        />
+        <StatCard
+          value={`${quizStats.bestScore}%`}
+          label="Best Score"
+          color="purple"
+        />
+        <StatCard
+          value={quizStats.currentStreak}
+          label="Day Streak"
+          color="orange"
+        />
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance by Category</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Performance by Category
+          </h3>
           <div className="space-y-4">
-            {topicStats.map((item, index) => (
-              <TopicProgress 
-                key={index}
-                topic={item.topic}
-                quizzes={item.quizzes}
-                score={item.score}
-              />
-            ))}
+            {topicStats.length === 0 ? (
+              <div className="p-4 bg-gray-50 rounded-lg text-center">
+                <p className="text-gray-500">
+                  No category performance data available
+                </p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Complete quizzes in different categories to see your
+                  performance breakdown
+                </p>
+              </div>
+            ) : (
+              topicStats.map((item, index) => (
+                <TopicProgress
+                  key={index}
+                  topic={item.topic}
+                  quizzes={item.quizzes}
+                  score={item.score}
+                />
+              ))
+            )}
           </div>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Time Statistics</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Time Statistics
+          </h3>
           <div className="space-y-4">
-            <TimeStatItem 
+            <TimeStatItem
               icon={Clock}
               iconColor="blue"
               label="Total Time Spent"
               value={quizStats.timeSpent}
             />
-            <TimeStatItem 
+            <TimeStatItem
               icon={BarChart3}
               iconColor="green"
               label="Average per Quiz"
               value={quizStats.avgTimeSpent}
             />
-            <TimeStatItem 
+            <TimeStatItem
               icon={Trophy}
               iconColor="purple"
               label="Fastest Completion"

@@ -214,7 +214,7 @@ export default function Account() {
     setFormData((prev) => ({ ...prev, avatarImageURL: url }));
     setShowAvatarModal(false);
     updateProfile(formData.name, formData.bio, url);
-    window.location.href = '/account'; 
+    window.location.href = "/account";
   };
 
   if (loading)
@@ -239,21 +239,23 @@ export default function Account() {
           />
         )}
 
-        <div className="flex mb-6 overflow-x-auto container justify-evenly">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                activeTab === tab.id
-                  ? "bg-blue-600 text-white hover:bg-blue-400"
-                  : "text-gray-600 hover:bg-blue-400 bg-blue-300"
-              }`}
-            >
-              <tab.icon size={18} />
-              <span>{tab.label}</span>
-            </button>
-          ))}
+        <div className="flex mb-6 overflow-x-auto container px-2 sm:px-0">
+          <div className="flex space-x-2 min-w-full sm:min-w-0 sm:justify-evenly">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center px-3 py-2 sm:px-4 rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
+                  activeTab === tab.id
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "text-gray-600 hover:bg-gray-200 bg-gray-200"
+                }`}
+              >
+                <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="ml-2 text-sm sm:text-base">{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-md">
@@ -264,7 +266,6 @@ export default function Account() {
               quizStats={quizStats}
               updateProfile={updateProfile}
             />
-            
           )}
 
           {activeTab === "stats" && (

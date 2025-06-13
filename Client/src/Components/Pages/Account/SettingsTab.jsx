@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ChangePasswordModal from "./ChangePasswordModal";
 import DeleteAccountModal from "./DeleteAccountModal";
+import { useNavigate } from "react-router-dom";
 
 export default function SettingsTab() {
   const notificationItems = [
@@ -27,16 +28,15 @@ export default function SettingsTab() {
   ];
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+    <div className="p-2">
+      <h2 className="text-2xl p-3 font-bold text-gray-900 ">
         Account Settings
       </h2>
 
       <div className="space-y-8">
         <SecuritySection />
-
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">
             Notifications
           </h3>
           <div className="space-y-4">
@@ -63,7 +63,7 @@ function SecuritySection() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Security</h3>
+      <h3 className="text-lg font-semibold p-3 text-gray-900 mb-1">Security</h3>
       <div className="ml-5 mr-5">
         <div className="flex mb-5 items-center justify-between space-x-4 bg-gray-50 rounded-lg">
           <div>
@@ -135,7 +135,7 @@ function PrivacySection() {
   const [leaderboardEnabled, setLeaderboardEnabled] = useState(true);
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Privacy</h3>
+      <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">Privacy</h3>
       <div className="space-y-4">
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
           <div>
@@ -144,10 +144,10 @@ function PrivacySection() {
               Control who can see your profile
             </p>
           </div>
-          <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <option>Public</option>
-            <option>Friends Only</option>
-            <option>Private</option>
+          <select className="text-sm sm:text-base w-32 sm:w-auto px-2.5 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option className="text-sm">Public</option>
+            <option className="text-sm">Friends Only</option>
+            <option className="text-sm">Private</option>
           </select>
         </div>
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -186,19 +186,62 @@ function PrivacySection() {
 
 function DataManagementSection() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
+  const handleClearHistory = async () => {
+    try {
+      const response = await fetch("/api/results/ClearUserResults", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Your quiz result history has been cleared.");
+      } else {
+        alert("Failed to clear history: " + (data.error || data.message));
+      }
+    } catch (error) {
+      console.error("Error while clearing history:", error);
+      alert("An error occurred while clearing your history.");
+    }
+  };
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">
         Data Management
       </h3>
       <div className="space-y-4">
-        <button className="w-full text-left p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-          <h4 className="font-medium text-gray-900">Export My Data</h4>
+        <button
+          onClick={handleClearHistory}
+          className="w-full text-left p-4 bg-blue-100 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <h4 className="font-medium text-gray-900">Clear Result History</h4>
           <p className="text-sm text-gray-500">
-            Download all your quiz data and statistics
+            Delete all your past quiz results and statistics
           </p>
         </button>
+
+        <button
+          onClick={handleLogout}
+          className="w-full text-left p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+        >
+          <h4 className="font-medium text-yellow-900">Logout</h4>
+          <p className="text-sm text-yellow-700">
+            Sign out of your account and clear session
+          </p>
+        </button>
+
         <button
           onClick={() => setShowDeleteModal(true)}
           className="w-full text-left p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
@@ -208,6 +251,7 @@ function DataManagementSection() {
             Permanently remove your account and all data
           </p>
         </button>
+
         <DeleteAccountModal
           show={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}

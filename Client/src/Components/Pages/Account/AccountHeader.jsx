@@ -2,24 +2,31 @@ import { Camera } from "lucide-react";
 
 export default function AccountHeader({ formData, quizStats, onAvatarClick }) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div className="flex items-center space-x-6">
-        <div className="relative">
-          <div className="w-24 h-24 rounded-full flex items-center">
-            <img src={formData.avatarImageURL} alt="User Avatar" className="w-full h-full rounded-full object-cover" />
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
+      <div className="flex items-center gap-3 sm:gap-6">
+        {/* Avatar Section */}
+        <div className="relative flex-shrink-0">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center">
+            <img 
+              src={formData.avatarImageURL} 
+              alt="User Avatar" 
+              className="w-full h-full rounded-full object-cover" 
+            />
           </div>
           <button 
-            className="absolute -bottom-1 -right-1 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+            className="absolute -bottom-1 -right-1 bg-blue-600 text-white p-1.5 sm:p-2 rounded-full hover:bg-blue-700 transition-colors"
             onClick={onAvatarClick}
           >
-            <Camera size={14} />
+            <Camera size={12} className="sm:w-3.5 sm:h-3.5" />
           </button>
         </div>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">
+
+        {/* User Info Section */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">
             {formData.name}
           </h1>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-xs sm:text-sm text-gray-500 mt-1 truncate">
             Member since{" "}
             {new Date(formData.createdAt).toLocaleDateString("en-US", {
               month: "long",
@@ -27,11 +34,15 @@ export default function AccountHeader({ formData, quizStats, onAvatarClick }) {
             })}
           </p>
         </div>
-        <div className="text-right">
-          <div className="text-2xl font-bold text-blue-600">
+
+        {/* Stats Section */}
+        <div className="flex-shrink-0 text-right ml-auto pl-2 sm:pl-0">
+          <div className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">
             {quizStats.averageScore}%
           </div>
-          <div className="text-sm text-gray-500">Average Score</div>
+          <div className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">
+            Average Score
+          </div>
         </div>
       </div>
     </div>
