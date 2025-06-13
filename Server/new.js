@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5174','http://localhost:5173', 'https://quizwhiz-1t5d.onrender.com','https://quizwhiz-azure-one.vercel.app/'],
+  origin: ['http://localhost:5174','http://localhost:5173', 'https://quizwhiz-1t5d.onrender.com','https://quizwhiz-azure-one.vercel.app'],
   credentials: true
 }));
 
