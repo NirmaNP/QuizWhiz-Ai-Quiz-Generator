@@ -19,28 +19,20 @@ import Help from "./Components/Pages/Help";
 
 const App = () => {
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
-      {!hideHeader && <Header />}
-      <div style={{ flex: 1 }}>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-          <Route element={<AuthLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-          <Route path="/quiz" element={<Quiz />} />{" "}
-        </Routes>
-      </div>
-      {!hideFooter && <Footer />}
-    </div>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/results" element={<Results />} />
+        <Route path="/account" element={<Account />} />
+      </Route>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Route>
+      <Route path="/quiz" element={<Quiz />} />{" "}
+    </Routes>
   );
 };
 
