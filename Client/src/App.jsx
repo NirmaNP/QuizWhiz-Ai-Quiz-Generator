@@ -9,21 +9,17 @@ import Signup from './Components/Pages/Authentication/Signup/Signup';
 import Login from './Components/Pages/Authentication/Login/Login';
 import Results from './Components/Pages/Results/Results';
 import Account from './Components/Pages/Account/Account';
-// import ParticlesComponent from './Components/Particles/Particles';
 import About from './Components/Pages/About';
 import Help from './Components/Pages/Help';
 
-const Layout = () => {
+const App = () => {
   const location = useLocation();
-  
   const hideHeader = ['/login', '/signup'].includes(location.pathname.toLowerCase());
-  
   const hideFooter = ['/login', '/signup', '/quiz'].includes(location.pathname.toLowerCase());
-
+  
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {!hideHeader && <Header />}
-      {/* <ParticlesComponent/> */}
       <div style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -38,14 +34,6 @@ const Layout = () => {
       </div>
       {!hideFooter && <Footer />}
     </div>
-  );
-};
-
-const App = () => {
-  return (
-    <Router>
-      <Layout />
-    </Router>
   );
 };
 
