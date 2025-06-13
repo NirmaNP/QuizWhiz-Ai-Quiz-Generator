@@ -29,10 +29,6 @@ app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 app.use('/user',require('./routes/auth'));
 app.use('/results',require('./routes/results'));
 
