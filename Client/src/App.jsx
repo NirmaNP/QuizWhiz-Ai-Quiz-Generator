@@ -4,7 +4,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation,
+  Outlet,
 } from "react-router-dom";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
@@ -31,7 +31,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
-      <Route path="/quiz" element={<Quiz />} />{" "}
+      <Route element={<QuizLayout />}>
+        <Route path="/quiz" element={<Quiz />} />{" "}
+      </Route>
     </Routes>
   );
 };
@@ -41,6 +43,13 @@ const MainLayout = () => (
     <Header />
     <Outlet />
     <Footer />
+  </>
+);
+
+const QuizLayout = () => (
+  <>
+    <Header />
+    <Outlet />
   </>
 );
 
