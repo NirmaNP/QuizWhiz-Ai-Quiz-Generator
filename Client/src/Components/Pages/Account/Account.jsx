@@ -218,13 +218,16 @@ export default function Account() {
   };
 
   if (loading)
-    return <div className="text-center">Loading quiz statistics...</div>;
-  if (error)
-    return <div className="text-center text-danger">Error: {error}</div>;
+  return (
+    <div className="min-h-screen flex items-center justify-center dark:bg-black text-gray-700 dark:text-gray-300">
+      Loading quiz statistics...
+    </div>
+  );if (error)
+    return <div className="text-center text-red-600 dark:text-red-400">Error: {error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-black p-6">
+      <div className="max-w-6xl pt-4 mx-auto">
         <AccountHeader
           formData={formData}
           quizStats={quizStats}
@@ -248,7 +251,7 @@ export default function Account() {
                 className={`flex items-center px-3 py-2 sm:px-4 rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
                   activeTab === tab.id
                     ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "text-gray-600 hover:bg-gray-200 bg-gray-200"
+                    : "text-gray-600 dark:text-gray-300 bg-gray-800/50 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
                 }`}
               >
                 <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -258,7 +261,7 @@ export default function Account() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
+        <div className=" dark:bg-gray-800/50 rounded-lg shadow-md transition-colors">
           {activeTab === "profile" && (
             <ProfileTab
               formData={formData}

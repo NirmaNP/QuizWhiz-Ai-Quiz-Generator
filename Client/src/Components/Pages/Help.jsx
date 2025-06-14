@@ -56,7 +56,7 @@ function Help() {
         "At the moment, there's no direct way to report questions. However, we're working on adding a feedback option so users can flag issues easily in the future.",
     },
   ];
-  const yourEmail = "support@quizwhiz.com"; // Replace with your actual email
+  const yourEmail = "support@quizwhiz.com";
   const defaultSubject = "Question about QuizWhiz";
 
   const handleContactClick = () => {
@@ -67,48 +67,52 @@ function Help() {
   };
 
   return (
-    <div className="bg-blue-50 p-10 ">
+    <div className=" dark:bg-black p-10 transition-colors duration-300">
       <div className="pt-6 container max-w-4xl space-y-8">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">Frequently Asked Questions</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-white mb-2">
+          Frequently Asked Questions
+        </h2>
 
         {/* FAQ Section */}
         <div className="space-y-4">
           {faqs.map((faq) => (
             <Disclosure key={faq.question}>
               {({ open }) => (
-                <>
-                  <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-left bg-white rounded-lg mb-2">
-                    <span className="font-medium">{faq.question}</span>
+                <div>
+                  <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-left bg-blue-100 dark:bg-gray-800/50 rounded-lg mb-2 transition-colors duration-200">
+                    <span className="font-medium text-gray-800 dark:text-white">
+                      {faq.question}
+                    </span>
                     <ChevronDownIcon
                       className={`${
                         open ? "transform rotate-180" : ""
-                      } w-5 h-5`}
+                      } w-5 h-5 text-gray-600 dark:text-gray-300`}
                     />
                   </Disclosure.Button>
-                  <Disclosure.Panel className="px-4 pb-2 text-gray-600">
+                  <Disclosure.Panel className="px-4 pb-2 text-gray-600 dark:text-gray-300">
                     {faq.answer}
                   </Disclosure.Panel>
-                </>
+                </div>
               )}
             </Disclosure>
           ))}
         </div>
 
         {/* Simple Contact Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+        <div className=" dark:bg-black/70 p-6 rounded-lg shadow-md border border-gray-200 dark:border-black transition-colors duration-300">
           <div className="flex items-center mb-4">
-            <EnvelopeIcon className="w-6 h-6 text-blue-500 mr-2" />
-            <h3 className="text-xl font-semibold">
+            <EnvelopeIcon className="w-6 h-6 text-blue-500 dark:text-blue-400 mr-2" />
+            <h3 className="text-xl font-semibold dark:text-white">
               Still need help? Contact Us
             </h3>
           </div>
 
           <div className="space-y-4">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Email us directly at:{" "}
               <a
                 href={`mailto:${yourEmail}`}
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 dark:text-blue-400 hover:underline"
               >
                 {yourEmail}
               </a>
@@ -116,13 +120,13 @@ function Help() {
 
             <button
               onClick={handleContactClick}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
             >
               <EnvelopeIcon className="w-5 h-5 mr-2" />
               Open Email App
             </button>
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Clicking this button will open your default email application with
               our support email pre-filled.
             </p>

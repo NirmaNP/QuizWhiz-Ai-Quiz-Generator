@@ -56,7 +56,6 @@ function Results() {
         if (!resultsResponse.ok) throw new Error("Failed to fetch results");
         const resultsData = await resultsResponse.json();
         setResults(resultsData);
-        console.log(resultsData)
       } catch (err) {
         console.error("Error:", err);
         setIsLoggedIn(false);
@@ -216,13 +215,13 @@ function Results() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center dark:bg-black">
+        <div className="text-center p-8 dark:bg-black backdrop-blur-sm rounded-xl shadow-lg border border-white/90 dark:border-gray-700 max-w-md w-full">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
             Loading your results...
           </h2>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Crunching the numbers for your analytics
           </p>
         </div>
@@ -232,15 +231,15 @@ function Results() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/90 p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaSignInAlt className="text-2xl text-indigo-600" />
+      <div className="min-h-screen flex items-center justify-center  dark:bg-black p-4">
+        <div className=" dark:bg-slate-950 backdrop-blur-sm rounded-2xl shadow-xl border border-white/90 dark:border-gray-700 p-8 max-w-md w-full text-center">
+          <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaSignInAlt className="text-2xl text-indigo-600 dark:text-indigo-400" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
             Access Your Analytics
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             Sign in to view your personalized quiz results and track your
             learning progress.
           </p>
@@ -253,7 +252,7 @@ function Results() {
             </button>
             <button
               onClick={() => navigate("/Register")}
-              className="px-6 py-3 bg-white text-gray-800 font-medium rounded-lg border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-slate-400 dark:bg-gray-700 text-gray-800 dark:text-white font-medium rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all flex items-center justify-center gap-2"
             >
               <FaUserPlus /> Sign Up
             </button>
@@ -265,21 +264,21 @@ function Results() {
 
   if (results.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/90 p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaRocket className="text-2xl text-blue-600" />
+      <div className="min-h-screen flex items-center justify-center dark:bg-black p-4">
+        <div className="bg-white/80 dark:bg-slate-950 backdrop-blur-sm rounded-2xl shadow-xl border border-white/90 dark:border-gray-700 p-8 max-w-md w-full text-center">
+          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaRocket className="text-2xl text-blue-600 dark:text-blue-400" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
             No Results Yet
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             You haven't taken any quizzes yet. Start your learning journey now!
           </p>
           <button
             onClick={() => navigate("/Quiz")}
             className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 mx-auto"
-          >
+            >
             <FaRocket /> Take First Quiz
           </button>
         </div>
@@ -292,26 +291,26 @@ function Results() {
   const accuracyData = getAccuracyTrendData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-5 px-3 sm:px-6 lg:px-8">
+    <div className="min-h-screen dark:bg-black py-5 px-3 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-left">
           <div className="inline-block">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-white mb-2">
               Your Analytics
             </h1>
             <div className="h-1 w-full bg-gradient-to-r from-blue-400 to-indigo-500 mb-3"></div>
           </div>
 
-          <p className="text-gray-600 max-w-2xl text-left">
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl text-left">
             Track your progress, identify strengths, and discover areas to
             improve
           </p>
         </div>
         {/* Stats Overview */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 p-6 mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-            <FaChartLine className="text-indigo-500" /> Performance Summary
+        <div className="bg-white/80 dark:bg-gray-900/40 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 dark:border-gray-700 p-6 mb-12">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <FaChartLine className="text-indigo-500 dark:text-indigo-400" /> Performance Summary
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -319,26 +318,26 @@ function Results() {
               icon={<FaTrophy className="text-yellow-500" />}
               title="Total Quizzes"
               value={stats.totalQuizzes}
-              color="bg-yellow-50"
+              color="bg-yellow-50 dark:bg-yellow-900/20"
             />
             <StatCard
               icon={<FaChartPie className="text-blue-500" />}
               title="Avg Accuracy"
               value={`${stats.avgAccuracy}%`}
-              color="bg-blue-50"
+              color="bg-blue-50 dark:bg-blue-900/20"
             />
             <StatCard
               icon={<FaClock className="text-purple-500" />}
               title="Avg Time"
               value={stats.avgTime}
-              color="bg-purple-50"
+              color="bg-purple-50 dark:bg-purple-900/20"
             />
             <StatCard
               icon={<FaTrophy className="text-green-500" />}
               title="Best Topic"
               value={`${stats.bestTopic.name}`}
               subValue={`${stats.bestTopic.accuracy}%`}
-              color="bg-green-50"
+              color="bg-green-50 dark:bg-green-900/20"
             />
             <StatCard
               icon={
@@ -359,8 +358,8 @@ function Results() {
               trend={stats.improvement.direction}
               color={
                 stats.improvement.direction === "increase"
-                  ? "bg-green-50"
-                  : "bg-red-50"
+                  ? "bg-green-50 dark:bg-green-900/20"
+                  : "bg-red-50 dark:bg-red-900/20"
               }
             />
           </div>
@@ -368,9 +367,9 @@ function Results() {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <FaChartPie className="text-indigo-500" /> Topics Distribution
+          <div className="bg-white/80 dark:bg-gray-900/40 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 dark:border-gray-700 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+              <FaChartPie className="text-indigo-500 dark:text-indigo-400" /> Topics Distribution
             </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -380,7 +379,7 @@ function Results() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={120}
+                    outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent }) =>
@@ -393,29 +392,40 @@ function Results() {
                   </Pie>
                   <Tooltip
                     formatter={(value) => [`${value} quizzes`, "Count"]}
+                    contentStyle={{
+                      background: "rgba(255, 255, 255, 0.95)",
+                      border: "1px solid #eee",
+                      borderRadius: "8px",
+                      color: "#333",
+                      backdropFilter: "blur(4px)",
+                    }}
                   />
-                  <Legend />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <FaChartBar className="text-indigo-500" /> Accuracy Trend
+          <div className="bg-white/80 dark:bg-gray-900/40 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 dark:border-gray-700 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+              <FaChartBar className="text-indigo-500 dark:text-indigo-400" /> Accuracy Trend
             </h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={accuracyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="date" stroke="#666" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" strokeOpacity={0.3} />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#888" 
+                    tick={{ fill: '#6b7280' }} 
+                  />
                   <YAxis
-                    stroke="#666"
+                    stroke="#888"
+                    tick={{ fill: '#6b7280' }}
                     label={{
                       value: "Accuracy (%)",
                       angle: -90,
                       position: "insideLeft",
-                      fill: "#666",
+                      fill: "#6b7280",
                     }}
                   />
                   <Tooltip
@@ -423,6 +433,7 @@ function Results() {
                       background: "rgba(255, 255, 255, 0.95)",
                       border: "1px solid #eee",
                       borderRadius: "8px",
+                      color: "#333",
                       backdropFilter: "blur(4px)",
                     }}
                     formatter={(value) => [`${value}%`, "Accuracy"]}
@@ -442,10 +453,30 @@ function Results() {
         </div>
 
         {/* Results List */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 ">
-          <h2 className="text-2xl font-semibold text-gray-900 ml-4 mt-4">
+        <div className="bg-white/80 dark:bg-gray-900/40 backdrop-blur-sm rounded-xl shadow-lg border border-white/90 dark:border-gray-700">
+          <div
+          className="mx-3 flex justify-between">
+
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white ml-4 mt-4">
             Your Quiz History
           </h2>
+          <div className="mt-7 mr-6">
+            <div className="flex space-x-6 items-center">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-green-500 rounded-full"></div>
+                <span className="text-sm text-gray-700 dark:text-gray-300">80% and above</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-yellow-500 rounded-full"></div>
+                <span className="text-sm text-gray-700 dark:text-gray-300">79% to 50%</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-red-500 rounded-full"></div>
+                <span className="text-sm text-gray-700 dark:text-gray-300">Below 50%</span>
+              </div>
+            </div>
+          </div>
+          </div>
           <div className="space-y-4">
             {results.map((result, index) => (
               <ResultBox
@@ -460,22 +491,7 @@ function Results() {
               />
             ))}
           </div>
-          <div className="mt-6 ml-6">
-            <div className="flex space-x-4 items-center">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-700">80% and above</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-yellow-500 rounded-full"></div>
-                <span className="text-sm text-gray-700">79% to 50%</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-red-500 rounded-full"></div>
-                <span className="text-sm text-gray-700">Below 50%</span>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
@@ -486,16 +502,16 @@ function Results() {
 function StatCard({ icon, title, value, subValue, trend, color }) {
   return (
     <div
-      className={`${color} p-4 rounded-lg border border-white/70 shadow-sm hover:shadow-md transition-shadow`}
+      className={`${color} p-4 rounded-lg border border-white/70 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow`}
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="p-2 bg-white rounded-lg shadow-xs">{icon}</div>
-        <h3 className="font-medium text-gray-700">{title}</h3>
+        <div className="p-2  dark:bg-trasparent rounded-lg shadow-xs">{icon}</div>
+        <h3 className="font-medium text-gray-700 dark:text-gray-300">{title}</h3>
       </div>
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {subValue && <p className="text-sm text-gray-600">{subValue}</p>}
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+          {subValue && <p className="text-sm text-gray-600 dark:text-gray-400">{subValue}</p>}
         </div>
         {trend && (
           <span

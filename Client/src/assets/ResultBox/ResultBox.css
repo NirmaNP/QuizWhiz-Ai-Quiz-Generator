@@ -9,7 +9,6 @@
   padding: 16px;
   margin-bottom: 20px;
   border-radius: 8px;
-  background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border-left: 5px solid transparent;
 }
@@ -17,17 +16,18 @@
 /* Question Status Indicators */
 .detailed-question.correct {
   border-left-color: #4CAF50;
-  background-color: #f6fff6;
+  /* background-color: #f6fff6; */
 }
 
 .detailed-question.incorrect {
   border-left-color: #F44336;
-  background-color: #fff6f6;
+  /* background-color: #fff6f6; */
 }
 
 .detailed-question.unanswered {
   border-left-color: #FFC107;
-  background-color: #fffcf5;
+  border-left-width: 5px;
+  /* background-color: #fffcf5; */
 }
 
 /* Question Text */
@@ -51,7 +51,6 @@
 .option {
   padding: 12px 14px;
   border-radius: 6px;
-  background-color: white;
   border: 1px solid #e0e0e0;
   font-size: 0.95rem;
   position: relative;
@@ -88,23 +87,19 @@
 }
 
 /* Answer Indicators */
-.correct-indicator,
-.wrong-indicator {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+.correct-option,
+.wrong-option {
   font-size: 0.8rem;
   padding: 3px 8px;
   border-radius: 12px;
 }
 
-.correct-indicator {
+.correct-option {
   background-color: #4CAF50;
   color: white;
 }
 
-.wrong-indicator {
+.wrong-option {
   background-color: #F44336;
   color: white;
 }
@@ -119,17 +114,14 @@
 }
 
 .feedback-correct {
-  background-color: #e8f5e9;
   color: #2E7D32;
 }
 
 .feedback-incorrect {
-  background-color: #ffebee;
   color: #c62828;
 }
 
 .feedback-unanswered {
-  background-color: #fff8e1;
   color: #FF8F00;
   font-weight: 500;
 }

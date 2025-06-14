@@ -29,14 +29,14 @@ export default function SettingsTab() {
 
   return (
     <div className="p-2">
-      <h2 className="text-2xl p-3 font-bold text-gray-900 ">
+      <h2 className="text-2xl p-3 font-bold text-gray-900 dark:text-white">
         Account Settings
       </h2>
 
       <div className="space-y-8">
         <SecuritySection />
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white p-3 mb-1">
             Notifications
           </h3>
           <div className="space-y-4">
@@ -63,15 +63,15 @@ function SecuritySection() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   return (
     <div>
-      <h3 className="text-lg font-semibold p-3 text-gray-900 mb-1">Security</h3>
-      <div className="ml-5 mr-5">
-        <div className="flex mb-5 items-center justify-between space-x-4 bg-gray-50 rounded-lg">
+      <h3 className="text-lg font-semibold p-3 text-gray-900 dark:text-white mb-1">Security</h3>
+      <div>
+        <div className="flex mb-3 items-center shadow-md justify-between space-x-4 bg-gray-50 dark:bg-black/70 rounded-lg p-4">
           <div>
-            <h4 className="font-medium text-base text-gray-900">Password</h4>
+            <h4 className="font-medium text-base text-gray-900 dark:text-white">Password</h4>
           </div>
           <button
             onClick={() => setShowPasswordModal(true)}
-            className="btn btn-primary"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Change Password
           </button>
@@ -81,12 +81,10 @@ function SecuritySection() {
             onClose={() => setShowPasswordModal(false)}
           />
         </div>
-        <div className="flex items-center justify-between space-x-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center shadow-md justify-between space-x-4 bg-gray-50 dark:bg-black/70 rounded-lg p-4">
           <div>
-            <h4 className="font-medium text-gray-900">
-              Two-Factor Authentication
-            </h4>
-            <p className="text-sm text-gray-500">
+            <h4 className="font-medium text-gray-900 dark:text-white">Two-Factor Authentication</h4>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Add extra security to your account
             </p>
           </div>
@@ -103,10 +101,10 @@ function NotificationToggle({ label, description, enabled: initialEnabled }) {
   const [enabled, setEnabled] = useState(initialEnabled);
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-black/70 shadow-md rounded-lg">
       <div>
-        <h4 className="font-medium text-gray-900">{label}</h4>
-        <p className="text-sm text-gray-500">{description}</p>
+        <h4 className="font-medium text-gray-900 dark:text-white">{label}</h4>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
       </div>
       <label className="flex items-center cursor-pointer">
         <input
@@ -117,7 +115,7 @@ function NotificationToggle({ label, description, enabled: initialEnabled }) {
         />
         <div
           className={`relative w-11 h-6 rounded-full transition-colors ${
-            enabled ? "bg-blue-600" : "bg-gray-300"
+            enabled ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
           }`}
         >
           <div
@@ -135,27 +133,25 @@ function PrivacySection() {
   const [leaderboardEnabled, setLeaderboardEnabled] = useState(true);
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">Privacy</h3>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white p-3 mb-1">Privacy</h3>
       <div className="space-y-4">
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-black/70 shadow-md rounded-lg">
           <div>
-            <h4 className="font-medium text-gray-900">Profile Visibility</h4>
-            <p className="text-sm text-gray-500">
+            <h4 className="font-medium text-gray-900 dark:text-white ">Profile Visibility</h4>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Control who can see your profile
             </p>
           </div>
-          <select className="text-sm sm:text-base w-32 sm:w-auto px-2.5 py-1.5 sm:px-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <select className="text-sm sm:text-base w-32 sm:w-auto px-2.5 py-1.5 sm:px-3 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-black/70 text-gray-900 dark:text-white">
             <option className="text-sm">Public</option>
             <option className="text-sm">Friends Only</option>
             <option className="text-sm">Private</option>
           </select>
         </div>
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-black/70 shadow-md  rounded-lg">
           <div>
-            <h4 className="font-medium text-gray-900">
-              Leaderboard Participation
-            </h4>
-            <p className="text-sm text-gray-500">
+            <h4 className="font-medium text-gray-900 dark:text-white">Leaderboard Participation</h4>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Show your scores on public leaderboards
             </p>
           </div>
@@ -168,7 +164,7 @@ function PrivacySection() {
             />
             <div
               className={`relative w-11 h-6 rounded-full transition-colors ${
-                leaderboardEnabled ? "bg-blue-600" : "bg-gray-300"
+                leaderboardEnabled ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
               }`}
             >
               <div
@@ -218,36 +214,36 @@ function DataManagementSection() {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 p-3 mb-1">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white p-3 mb-1">
         Data Management
       </h3>
       <div className="space-y-4">
         <button
           onClick={handleClearHistory}
-          className="w-full text-left p-4 bg-blue-100 rounded-lg hover:bg-gray-100 transition-colors"
+          className="w-full text-left p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900 transition-colors"
         >
-          <h4 className="font-medium text-gray-900">Clear Result History</h4>
-          <p className="text-sm text-gray-500">
+          <h4 className="font-medium text-gray-900 dark:text-white">Clear Result History</h4>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Delete all your past quiz results and statistics
           </p>
         </button>
 
         <button
           onClick={handleLogout}
-          className="w-full text-left p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+          className="w-full text-left p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-800 transition-colors"
         >
-          <h4 className="font-medium text-yellow-900">Logout</h4>
-          <p className="text-sm text-yellow-700">
+          <h4 className="font-medium text-yellow-900 dark:text-yellow-200">Logout</h4>
+          <p className="text-sm text-yellow-700 dark:text-yellow-300">
             Sign out of your account and clear session
           </p>
         </button>
 
         <button
           onClick={() => setShowDeleteModal(true)}
-          className="w-full text-left p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+          className="w-full text-left p-4 bg-red-50 dark:bg-red-900/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-800 transition-colors"
         >
-          <h4 className="font-medium text-red-900">Delete Account</h4>
-          <p className="text-sm text-red-600">
+          <h4 className="font-medium text-red-900 dark:text-red-200">Delete Account</h4>
+          <p className="text-sm text-red-600 dark:text-red-300">
             Permanently remove your account and all data
           </p>
         </button>

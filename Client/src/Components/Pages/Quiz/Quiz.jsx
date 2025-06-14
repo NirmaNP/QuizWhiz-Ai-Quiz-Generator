@@ -381,31 +381,30 @@ function Quiz() {
   };
 
   return (
-    <div className="quiz-page-wrapper z-0">
+        <div className="quiz-page-wrapper z-0 dark:bg-black dark:text-white ">
       {showConfigModal && (
-        <div className="quiz-modal">
-          <div className="quiz-modal">
+          <div className="quiz-modal dark:border-gray-700 dark:bg-gray-950 shadow-lg">
             <span className="text-transparent bg-clip-text bg-gradient-to-r quiz-modal-title from-blue-500 to-indigo-600">
               Quiz Configuration
             </span>
             {error && <div className="quiz-error-message">{error}</div>}
 
-            <label className="quiz-label">
+            <label className="quiz-label dark:text-white">
               Topic:
               <input
                 type="text"
                 value={config.topic}
                 onChange={handleTopicChange}
-                className="quiz-input"
+                className="quiz-input dark:bg-black/50 dark:text-white dark:placeholder-gray-300 "
                 placeholder="Enter a topic for your quiz"
               />
             </label>
-            <label className="quiz-label">
+            <label className="quiz-label dark:text-white">
               Difficulty:
               <select
                 value={config.difficulty}
                 onChange={handleDifficultyChange}
-                className="quiz-input"
+                className="quiz-input dark:bg-black/50 dark:text-white"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -413,47 +412,41 @@ function Quiz() {
               </select>
             </label>
 
-            <label className="quiz-label">
+            <label className="quiz-label dark:text-white">
               Number of Questions:
               <input
                 type="number"
                 value={config.numQuestions}
                 onChange={handleNumQuestionsChange}
-                className="quiz-input"
+                className="quiz-input dark:bg-black/50 dark:text-white"
               />
             </label>
 
-            <label className="quiz-label">
+            <label className="quiz-label dark:text-white">
               Timer Type:
               <select
                 value={config.timerType}
-                onChange={(e) =>
-                  setConfig({ ...config, timerType: e.target.value })
-                }
-                className="quiz-input"
+                onChange={(e) => setConfig({ ...config, timerType: e.target.value })}
+                className="quiz-input dark:bg-black/50 dark:text-white"
               >
                 <option value="individual">Individual</option>
                 <option value="collective">Collective</option>
               </select>
             </label>
-            <label className="quiz-label">
-              Timer Duration (
-              {config.timerType === "individual" ? "seconds" : "minutes"}):
+
+            <label className="quiz-label dark:text-white">
+              Timer Duration ({config.timerType === "individual" ? "seconds" : "minutes"}):
               <input
                 type="number"
                 value={config.timerDuration}
-                onChange={(e) =>
-                  setConfig({
-                    ...config,
-                    timerDuration: parseInt(e.target.value),
-                  })
-                }
-                className="quiz-input"
+                onChange={(e) => setConfig({ ...config, timerDuration: parseInt(e.target.value) })}
+                className="quiz-input dark:bg-black/50 dark:text-white"
               />
             </label>
+
             <button
               onClick={handleConfigSubmit}
-              className="quiz-button"
+              className="quiz-button dark:bg-green-500 dark:hover:bg-green-600"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -472,16 +465,12 @@ function Quiz() {
               </div>
             )}
           </div>
-        </div>
       )}
 
       {quizStarted && !quizFinished && (
-        <div className="quiz-container">
+        <div className="quiz-container shadow-md dark:bg-white/5">
           <div className="quiz-progress-container">
-            <div
-              className="quiz-progress-bar"
-              style={{ width: `${progress}%` }}
-            />
+            <div className="quiz-progress-bar" style={{ width: `${progress}%` }} />
           </div>
 
           <h2 className="quiz-question-title">
@@ -491,7 +480,7 @@ function Quiz() {
             Question {currentQuestionIndex + 1} of {questions.length}
           </h2>
 
-          <p className="quiz-question-text">
+          <p className="quiz-question-text dark:text-white">
             {questions[currentQuestionIndex]?.text}
           </p>
 
@@ -502,7 +491,7 @@ function Quiz() {
                 onClick={() => handleAnswerSelect(option)}
                 className={`quiz-option-button ${
                   selectedOption === option ? "quiz-option-selected" : ""
-                }`}
+                } dark:bg-black dark:hover:bg-gray-600 dark:text-white`}
               >
                 {option}
               </button>
@@ -512,19 +501,21 @@ function Quiz() {
           <button
             ref={nextButtonRef}
             onClick={goToNextQuestion}
-            className="quiz-next-button"
+            className="quiz-next-button dark:bg-blue-600 dark:hover:bg-blue-700"
           >
             {currentQuestionIndex < questions.length - 1 ? "Next" : "Finish"}
           </button>
 
-          <p className="quiz-keyboard-hint">
+          <p className="quiz-keyboard-hint dark:text-gray-400">
             Press Enter to go to the next question
           </p>
 
           {config.timerType === "individual" ? (
-            <p className="quiz-timer">Time Remaining: {timer} seconds</p>
+            <p className="quiz-timer dark:text-red-400">
+              Time Remaining: {timer} seconds
+            </p>
           ) : (
-            <p className="quiz-timer">
+            <p className="quiz-timer dark:text-red-400">
               Total Time Remaining: {formatTime(totalTime)}
             </p>
           )}
@@ -532,16 +523,16 @@ function Quiz() {
       )}
 
       {quizFinished && (
-        <div className="quiz-results-container">
-          <div className="quiz-results-card">
+        <div className="quiz-results-container dark:bg-black dark:text-white">
+          <div className="quiz-results-card dark:bg-white/5 dark:text-white">
             <h2 className="quiz-results-title">Quiz Results</h2>
 
-            <div className="quiz-score-circle">
-              <div className="quiz-score-inner">
-                <span className="quiz-score-value">
+            <div className="quiz-score-circle dark:bg-black dark:border-gray-600">
+              <div className="quiz-score-inner dark:bg-black">
+                <span className="quiz-score-value  dark:text-white">
                   {calculateScore()}/{questions.length}
                 </span>
-                <span className="quiz-score-percentage">
+                <span className="quiz-score-percentage ">
                   {calculatePercentage()}%
                 </span>
               </div>
@@ -549,29 +540,29 @@ function Quiz() {
 
             <div className="quiz-feedback">{getFeedback()}</div>
 
-            <div className="quiz-results-details">
+            <div className="quiz-results-details dark:bg-white/5">
               <div className="quiz-result-item">
-                <span className="quiz-result-label">Topic:</span>
-                <span className="quiz-result-value">
+                <span className="quiz-result-label  dark:text-white">Topic:</span>
+                <span className="quiz-result-value  dark:text-white">
                   {config.topic || "General"}
                 </span>
               </div>
 
               <div className="quiz-result-item">
-                <span className="quiz-result-label">Difficulty:</span>
-                <span className="quiz-result-value">{config.difficulty}</span>
+                <span className="quiz-result-label  dark:text-white">Difficulty:</span>
+                <span className="quiz-result-value dark:text-white"  >{config.difficulty}</span>
               </div>
 
               <div className="quiz-result-item">
-                <span className="quiz-result-label">Time taken:</span>
-                <span className="quiz-result-value">
+                <span className="quiz-result-label  dark:text-white">Time taken:</span>
+                <span className="quiz-result-value  dark:text-white">
                   {actualTimeTaken.toFixed(2)} seconds
                 </span>
               </div>
             </div>
 
             {!localStorage.getItem("token") && (
-              <div className="quiz-not-logged-in-message">
+              <div className="quiz-not-logged-in-message  dark:bg-transparent">
                 You're not logged in. These results won't be saved to your
                 profile.
               </div>
@@ -582,7 +573,7 @@ function Quiz() {
                 setShowConfigModal(true);
                 setQuizFinished(false);
               }}
-              className="quiz-button quiz-new-button"
+              className="quiz-button quiz-new-button dark:bg-green-500 dark:hover:bg-green-600"
             >
               New Quiz
             </button>
@@ -590,6 +581,7 @@ function Quiz() {
         </div>
       )}
     </div>
+
   );
 }
 

@@ -8,19 +8,18 @@ function ResultBox(props) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const borderColor =
     percentage >= 80
-      ? "border-green-500"
+      ? "border-green-500 dark:border-green-600"
       : percentage >= 50
-      ? "border-yellow-500"
-      : "border-red-500";
+      ? "border-yellow-500 dark:border-yellow-600"
+      : "border-red-500 dark:border-red-600";
 
   // Check if we have detailed results in props
   const hasDetailedResults = props.questions && props.questions.length > 0;
 
   useEffect(() => {
     if (showDetailsModal && modalRef.current) {
-      // Scroll with some margin from top
       const topOffset =
-        modalRef.current.getBoundingClientRect().top + window.scrollY - 80; // 80px if your header is fixed
+        modalRef.current.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: topOffset, behavior: "smooth" });
     }
   }, [showDetailsModal]);
@@ -29,10 +28,7 @@ function ResultBox(props) {
   const scrollPosition = useRef(0);
 
   const handleOpen = () => {
-    // Store the current scroll position (not the element position)
     scrollPosition.current = window.scrollY;
-    console.log(scrollPosition);
-
     setShowDetailsModal(true);
 
     setTimeout(() => {
@@ -46,59 +42,57 @@ function ResultBox(props) {
 
   const handleClose = () => {
     setShowDetailsModal(false);
-
-    // Restore scroll after fade-out animation ends
     setTimeout(() => {
       window.scrollTo({ top: scrollPosition.current, behavior: "smooth" });
-    }, 100); // match modal fade-out duration
+    }, 100);
   };
 
   return (
     <>
       <div
-        className={`border-2 ${borderColor} rounded-xl m-4 p-6 shadow-md flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:shadow-lg transition-shadow`}
+        className={`border-2 ${borderColor} rounded-xl m-4 p-6 shadow-md flex flex-col md:flex-row md:items-center gap-4 md:gap-6 hover:shadow-lg transition-shadow dark:bg-black/50`}
         ref={resultBoxRef}
       >
         {/* Equal-width columns */}
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Date
           </span>
-          <span className="font-medium text-gray-800 block mt-1">
+          <span className="font-medium text-gray-800 dark:text-gray-200 block mt-1">
             {props.date}
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Topic
           </span>
-          <span className="font-medium text-gray-800 block mt-1">
+          <span className="font-medium text-gray-800 dark:text-gray-200 block mt-1">
             {props.topic}
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Difficulty
           </span>
-          <span className="font-medium text-gray-800 block mt-1 capitalize">
+          <span className="font-medium text-gray-800 dark:text-gray-200 block mt-1 capitalize">
             {props.difficulty}
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Time Taken
           </span>
-          <span className="font-medium text-gray-800 block mt-1">
+          <span className="font-medium text-gray-800 dark:text-gray-200 block mt-1">
             {props.timeTaken}
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-wider">
+          <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Score
           </span>
-          <span className="font-medium text-gray-800 block mt-1">
+          <span className="font-medium text-gray-800 dark:text-gray-200 block mt-1">
             {props.score} / {props.total}{" "}
-            <span className="text-sm">({percentage.toFixed(0)}%)</span>
+            <span className="text-sm dark:text-gray-300">({percentage.toFixed(0)}%)</span>
           </span>
         </div>
 
@@ -109,7 +103,7 @@ function ResultBox(props) {
               handleOpen();
               setShowDetailsModal(true);
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium w-full sm:w-auto"
+            className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors text-sm font-medium w-full sm:w-auto"
             disabled={!hasDetailedResults}
             title={!hasDetailedResults ? "Detailed results not available" : ""}
           >
@@ -130,25 +124,25 @@ function ResultBox(props) {
             width="90vw"
             maxHeight="90vh"
           >
-            <div className="detailed-results-content">
+            <div className="detailed-results-content dark:bg-black">
               {props.questions.map((question, index) => (
                 <div
                   key={index}
                   className={`detailed-question ${
                     question.isCorrect
-                      ? "correct"
+                      ? "correct dark:bg-green-900/20"
                       : question.userAnswer === "Not answered"
-                      ? "unanswered"
-                      : "incorrect"
+                      ? "unanswered dark:bg-yellow-700/20"
+                      : "incorrect dark:bg-red-900/20"
                   }`}
                 >
-                  <h3>
+                  <h3 className=" dark:text-gray-200">
                     Question {index + 1}: {question.questionText}
                   </h3>
 
                   <div className="all-options">
                     {question.options.map((option, optIndex) => {
-                      const optionLabel = String.fromCharCode(65 + optIndex); // A, B, C, D
+                      const optionLabel = String.fromCharCode(65 + optIndex);
                       const isUserAnswer = option === question.userAnswer;
                       const isCorrectAnswer = option === question.correctAnswer;
 
@@ -156,19 +150,19 @@ function ResultBox(props) {
                         <div
                           key={optIndex}
                           className={`
-                    option 
-                    ${isCorrectAnswer ? "correct-option" : ""}
-                    ${isUserAnswer && !isCorrectAnswer ? "wrong-selection" : ""}
-                    ${isUserAnswer ? "user-selected" : ""}
-                  `}
+                            option  dark:bg-black dark:text-gray-200
+                            ${isCorrectAnswer ? 'border-green-500 dark:bg-green-800/30 dark:border-green-600' : ''}
+                            ${isUserAnswer && !isCorrectAnswer ? 'border-red-500 dark:bg-red-800/30 dark:border-red-600' : ''}
+                          `}
                         >
-                          <span className="option-label">{optionLabel}.</span>{" "}
+
+                          <span className="option-label dark:bg-black">{optionLabel}.</span>{" "}
                           {option}
                           {isCorrectAnswer && !isUserAnswer && (
-                            <span className="correct-indicator">✓ Correct</span>
+                            <span className="correct-indicator ">✓ Correct</span>
                           )}
                           {isUserAnswer && !isCorrectAnswer && (
-                            <span className="wrong-indicator">
+                            <span className="wrong-indicator ">
                               ✗ Your choice
                             </span>
                           )}
@@ -182,19 +176,19 @@ function ResultBox(props) {
                     })}
                   </div>
 
-                  <div className="answer-feedback">
+                  <div className="answer-feedback ">
                     {question.isCorrect ? (
-                      <span className="feedback-correct">
+                      <span className="feedback-correct  dark:text-green-400">
                         ✓ You answered correctly!
                       </span>
                     ) : question.userAnswer === "Not answered" ? (
-                      <span className="feedback-unanswered">
+                      <span className="feedback-unanswered dark:text-yellow-400">
                         ⚠ You didn't answer this question
                       </span>
                     ) : (
-                      <span className="feedback-incorrect">
+                      <span className="feedback-incorrect dark:text-red-400">
                         ✗ Your answer was incorrect. The correct answer was:{" "}
-                        <strong>{question.correctAnswer}</strong>
+                        <strong className="dark:text-red">{question.correctAnswer}</strong>
                       </span>
                     )}
                   </div>
