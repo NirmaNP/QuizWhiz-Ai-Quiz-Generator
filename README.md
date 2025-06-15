@@ -44,7 +44,7 @@ With real-time feedback and deep analysis, QuizWhiz ensures learning is both fun
 ```bash
 git clone https://github.com/NirmaNP/QuizWhiz-Ai-Quiz-Generator.git
 cd QuizWhiz-Ai-Quiz-Generator
-
+```
 **Setup**
 
 Backend :-
@@ -81,6 +81,12 @@ Run the frontend:
 ```bash
   npm run dev
 ```
+
+Can directly run both frontend and backend:
+```bash
+  npm run dev
+```
+while in Parent directory 
 ## Contributing
 
 Contributions are always welcomed!
