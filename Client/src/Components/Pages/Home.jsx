@@ -123,8 +123,9 @@ function Home() {
                   <button
                     key={topic}
                     onClick={() => {
+                      setSelectedTopic(topic)
                       setConfig({ ...config, selectedTopic: topic });
-                      handleTopicClick(topic);
+                      handleTopicClick();
                     }}
                     className="px-4 py-2 bg-white/70 dark:bg-slate-950 text-gray-800 dark:text-gray-200 font-medium rounded-lg border border-black/90 dark:border-gray-900 shadow-sm hover:bg-white dark:hover:bg-slate-900 hover:shadow-md transition-all duration-200 text-sm backdrop-blur-sm hover:scale-105"
                   >
