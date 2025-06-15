@@ -4,7 +4,7 @@ import "./Quiz.css";
 
 function Quiz() {
   const URL = import.meta.env.VITE_API_URL;
-
+  const apiKey = import.meta.env.GEMINI_API_KEY;
   const [config, setConfig] = useState({
     topic: "",
     difficulty: "easy",
@@ -75,7 +75,6 @@ function Quiz() {
     setIsLoading(true);
 
     try {
-      const apiKey = "AIzaSyAjGFif217NTM9i3-QFAVyl5FNdMo4Rx0k";
       if (!apiKey) throw new Error("API Key is missing");
 
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;

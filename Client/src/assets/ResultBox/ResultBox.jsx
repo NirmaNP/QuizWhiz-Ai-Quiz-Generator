@@ -124,16 +124,16 @@ function ResultBox(props) {
             width="90vw"
             maxHeight="90vh"
           >
-            <div className="detailed-results-content dark:bg-black">
+            <div className="detailed-results-content  dark:bg-black">
               {props.questions.map((question, index) => (
                 <div
                   key={index}
                   className={`detailed-question ${
                     question.isCorrect
-                      ? "correct dark:bg-green-900/20"
+                      ? "correct light:bg-green-100 dark:bg-green-900/20"
                       : question.userAnswer === "Not answered"
-                      ? "unanswered dark:bg-yellow-700/20"
-                      : "incorrect dark:bg-red-900/20"
+                      ? "unanswered light:bg-yellow-100 dark:bg-yellow-700/20"
+                      : "incorrect light:bg-red-100 dark:bg-red-900/20"
                   }`}
                 >
                   <h3 className=" dark:text-gray-200">
@@ -150,19 +150,20 @@ function ResultBox(props) {
                         <div
                           key={optIndex}
                           className={`
-                            option  dark:bg-black dark:text-gray-200
-                            ${isCorrectAnswer ? 'border-green-500 dark:bg-green-800/30 dark:border-green-600' : ''}
-                            ${isUserAnswer && !isCorrectAnswer ? 'border-red-500 dark:bg-red-800/30 dark:border-red-600' : ''}
+                            option 
+                             dark:bg-black 
+                            light:text-black dark:text-gray-200 
+                            ${isCorrectAnswer ? 'correct-option light:bg-green-100 light:border-green-500 dark:bg-green-800/30 dark:border-green-600' : ''}
+                            ${isUserAnswer && !isCorrectAnswer ? 'wrong-selection light:bg-red-100 light:border-red-500 dark:bg-red-800/30 dark:border-red-600' : ''}
                           `}
                         >
-
                           <span className="option-label dark:bg-black">{optionLabel}.</span>{" "}
                           {option}
                           {isCorrectAnswer && !isUserAnswer && (
-                            <span className="correct-indicator ">✓ Correct</span>
+                            <span className="correct-indicator light:color-green">✓ Correct</span>
                           )}
                           {isUserAnswer && !isCorrectAnswer && (
-                            <span className="wrong-indicator ">
+                            <span className="wrong-indicator light:color-red">
                               ✗ Your choice
                             </span>
                           )}

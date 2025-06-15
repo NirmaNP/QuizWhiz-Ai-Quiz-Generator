@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState();
   const navigate = useNavigate();
 
   const [config, setConfig] = useState({
@@ -35,9 +35,8 @@ function Home() {
     }));
   }, []);
 
-  const handleTopicClick = (topic) => {
-    setSelectedTopic(topic);
-    localStorage.setItem("selectedTopic", topic);
+  const handleTopicClick = () => {
+    localStorage.setItem("selectedTopic", selectedTopic);
     navigate("/Quiz");
   };
 
@@ -77,22 +76,23 @@ function Home() {
               <input
                 type="text"
                 value={config.selectedTopic}
-                onChange={(e) =>
+                onChange={(e) =>{
+                  setSelectedTopic(e.target.value)
                   setConfig({ ...config, selectedTopic: e.target.value })
-                }
+                }}
                 placeholder="What do you want to learn today?"
                 className="flex-grow px-6 py-4 bg-transparent text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none"
               />
               <button
                 className="hidden sm:flex px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold items-center gap-2 transition-all hover:from-blue-600 hover:to-indigo-700"
-                onClick={handleGenerateClick}
-              >
+                onClick={handleTopicClick}
+                >
                 Start Quiz <FaArrowRight />
               </button>
             </div>
             <button
               className="mt-2 sm:hidden px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-full flex items-center justify-center gap-2 transition-all hover:from-blue-600 hover:to-indigo-700"
-              onClick={handleGenerateClick}
+              onClick={handleTopicClick}
             >
               Start Quiz <FaArrowRight />
             </button>
