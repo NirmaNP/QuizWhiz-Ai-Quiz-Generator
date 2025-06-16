@@ -11,32 +11,15 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const [selectedTopic, setSelectedTopic] = useState();
+  const [selectedTopic, setSelectedTopic] = useState("");
   const navigate = useNavigate();
-
-  const [config, setConfig] = useState({
-    topic: "",
-    difficulty: "",
-    numQuestions: 10,
-  });
-
-  useEffect(() => {
-    const storedTopic = localStorage.getItem("selectedTopic");
-    const storedDifficulty = localStorage.getItem("selectedDifficulty");
-    const storedNumQuestions = localStorage.getItem("numQuestions");
-
-    setConfig((prevConfig) => ({
-      ...prevConfig,
-      topic: storedTopic || prevConfig.topic,
-      difficulty: storedDifficulty || prevConfig.difficulty,
-      numQuestions: storedNumQuestions
-        ? parseInt(storedNumQuestions)
-        : prevConfig.numQuestions,
-    }));
-  }, []);
 
   const handleTopicClick = () => {
     localStorage.setItem("selectedTopic", selectedTopic);
+    navigate("/Quiz");
+  };
+  const handleTopicButtonClick = (topic) => {
+    localStorage.setItem("selectedTopic", topic);
     navigate("/Quiz");
   };
 
@@ -49,7 +32,6 @@ function Home() {
 
   return (
     <div className=" bg-white dark:bg-black transition-colors duration-300">
-      
       {/* Hero Section */}
       <div className="relative z-10 dark:bg-black w-full px-4 py-8 sm:pl-20 md:py-24 text-center backdrop-blur">
         <div className="max-w-7xl mx-auto">
@@ -75,10 +57,9 @@ function Home() {
             <div className="flex w-full max-w-2xl group transition-all duration-300 hover:scale-[1.02] focus-within:scale-[1.02] rounded-xl shadow-lg bg-white/50 dark:bg-slate-950 backdrop-blur-md border border-white/70 dark:border-gray-700 overflow-hidden">
               <input
                 type="text"
-                value={config.selectedTopic}
-                onChange={(e) =>{
-                  setSelectedTopic(e.target.value)
-                  setConfig({ ...config, selectedTopic: e.target.value })
+                value={selectedTopic}
+                onChange={(e) => {
+                  setSelectedTopic(e.target.value);
                 }}
                 placeholder="What do you want to learn today?"
                 className="flex-grow px-6 py-4 bg-transparent text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none"
@@ -86,7 +67,7 @@ function Home() {
               <button
                 className="hidden sm:flex px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold items-center gap-2 transition-all hover:from-blue-600 hover:to-indigo-700"
                 onClick={handleTopicClick}
-                >
+              >
                 Start Quiz <FaArrowRight />
               </button>
             </div>
@@ -98,7 +79,9 @@ function Home() {
             </button>
 
             <div className="mt-8">
-              <p className="text-gray-600 dark:text-gray-400 mb-3">Popular topics:</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-3">
+                Popular topics:
+              </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 {[
                   "Math Basics",
@@ -122,11 +105,11 @@ function Home() {
                 ].map((topic) => (
                   <button
                     key={topic}
-                    onClick={() => {
-                      setSelectedTopic(topic)
-                      setConfig({ ...config, selectedTopic: topic });
-                      handleTopicClick()
+                    onClick={()=>{
+                      setSelectedTopic(topic);
+                      handleTopicButtonClick(topic);
                     }}
+
                     className="px-4 py-2 bg-white/70 dark:bg-slate-950 text-gray-800 dark:text-gray-200 font-medium rounded-lg border border-black/90 dark:border-gray-900 shadow-sm hover:bg-white dark:hover:bg-slate-900 hover:shadow-md transition-all duration-200 text-sm backdrop-blur-sm hover:scale-105"
                   >
                     {topic}
@@ -344,8 +327,12 @@ function Home() {
                   className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
                 />
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Johnson</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Medical Student</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                    Sarah Johnson
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Medical Student
+                  </p>
                 </div>
               </div>
               <p className="text-gray-700 dark:text-gray-300 italic mb-6">
@@ -375,8 +362,12 @@ function Home() {
                   className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
                 />
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Michael Chen</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Software Engineer</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                    Michael Chen
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Software Engineer
+                  </p>
                 </div>
               </div>
               <p className="text-gray-700 dark:text-gray-300 italic mb-6">
