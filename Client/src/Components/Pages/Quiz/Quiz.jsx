@@ -39,6 +39,7 @@ function Quiz() {
     const savedDifficulty = localStorage.getItem("selectedDifficulty");
     const savedNumQuestions = localStorage.getItem("numQuestions");
 
+    console.log(savedTopic);
     if (savedTopic || savedDifficulty || savedNumQuestions) {
       setConfig((prevConfig) => ({
         ...prevConfig,
