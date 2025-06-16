@@ -193,7 +193,7 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3498db, #2c3e50);
+    background: white;
     margin: 0 auto 30px;
     display: flex;
     justify-content: center;
@@ -210,7 +210,7 @@
     border-radius: 50%;
     border: 8px solid #e0e7ff;
     border-top-color: #4f46e5;
-    transform: rotate(45deg);
+    transform: rotate(1deg);
     animation: spin 1s linear infinite;
   }
   
