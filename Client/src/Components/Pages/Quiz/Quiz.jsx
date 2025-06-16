@@ -4,7 +4,8 @@ import "./Quiz.css";
 
 function Quiz() {
   const URL = import.meta.env.VITE_API_URL;
-  const apiKey = import.meta.env.GEMINI_API_KEY;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  // console.log(apiKey)
   const [config, setConfig] = useState({
     topic: "",
     difficulty: "easy",
@@ -139,52 +140,39 @@ function Quiz() {
   };
 
   const handleConfigSubmit = async () => {
-    setError(null);
-    setIsLoading(true);
+  setError(null);
+  setIsLoading(true);
 
-    let parsedQuestions = [];
-    const storedQuestions = localStorage.getItem("quizQuestions");
+  // Clear stored questions to force new generation
+  localStorage.removeItem("quizQuestions");
 
-    try {
-      const aiQuestions = await handleCompletion();
+  try {
+    const aiQuestions = await handleCompletion();
 
-      if (aiQuestions && aiQuestions.length > 0) {
-        parsedQuestions = aiQuestions;
-      } else if (storedQuestions) {
-        parsedQuestions = JSON.parse(storedQuestions);
-      } else {
-        parsedQuestions = Array.from(
-          { length: config.numQuestions },
-          (_, i) => ({
-            id: i + 1,
-            text: `Question ${i + 1}: What is the answer?`,
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-          })
-        );
-      }
-
-      setQuestions(parsedQuestions);
-      setShowConfigModal(false);
-      setQuizStarted(true);
-      setTimer(config.timerDuration);
-      setTotalTime(
-        config.timerType === "individual"
-          ? config.timerDuration * config.numQuestions
-          : config.timerDuration * 60
-      );
-      setStartTime(new Date());
-      setUserAnswers([]);
-      setCurrentQuestionIndex(0);
-      setQuizFinished(false);
-    } catch (error) {
-      console.error("Error parsing questions:", error);
-      setError("Failed to generate questions. Please try again.");
-    } finally {
-      setIsLoading(false);
+    if (!aiQuestions || aiQuestions.length === 0) {
+      throw new Error("Failed to generate questions");
     }
-  };
 
+    setQuestions(aiQuestions);
+    setShowConfigModal(false);
+    setQuizStarted(true);
+    setTimer(config.timerDuration);
+    setTotalTime(
+      config.timerType === "individual"
+        ? config.timerDuration * config.numQuestions
+        : config.timerDuration * 60
+    );
+    setStartTime(new Date());
+    setUserAnswers([]);
+    setCurrentQuestionIndex(0);
+    setQuizFinished(false);
+  } catch (error) {
+    console.error("Error in handleConfigSubmit:", error);
+    setError(error.message || "Failed to generate questions. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
   const finishQuiz = useCallback(
     async (answers) => {
       const endTime = new Date();
